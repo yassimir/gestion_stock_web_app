@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Details Client | Crédit</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Recherche de Client</h2>
+
+  <!-- Formulaire de recherche -->
+  <form method="get" th:action="@{/gharnata/modify-credit}" class="input-group mb-4">
+    <input list="codes" class="form-control" name="ice" placeholder="Nom ou ICE du client" required autofocus>
+    <datalist id="codes">
+      <th:block th:each="client : ${clients}">
+        <option th:value="${client.ice}" th:text="${client.ste}"></option>
+      </th:block>
+    </datalist>
+    <button class="btn btn-primary" type="submit">Rechercher</button>
+  </form>
+
+  <!-- Si le client a été trouvé -->
+  <div th:if="${client != null}" class="card">
+    <div class="card-body">
+      <h5 class="card-title">Informations du client</h5>
+      <p><strong>ID :</strong> <span th:text="${client.id}"></span></p>
+      <p><strong>Nom :</strong> <span th:text="${client.ste}"></span></p>
+      <p><strong>Tel :</strong> <span th:text="${client.tel}"></span></p>
+      <p><strong>Crédit actuel :</strong> <span th:text="${client.getCompte().getCredit()}"></span> MAD</p>
+
+      <!-- Formulaire de modification du crédit -->
+      <form method="post" th:action="@{/gharnata/modify-credit}" >
+        <input type="hidden" name="id" th:value="${client.id}">
+        <label for="credit" class="form-label mt-2">Modifier le crédit :</label>
+        <input type="number" step="0.01" class="form-control" id="credit" name="nouveauCredit" th:value="${client.getCompte().getCredit()}">
+        <button type="submit" class="btn btn-success mt-2">Ajouter</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

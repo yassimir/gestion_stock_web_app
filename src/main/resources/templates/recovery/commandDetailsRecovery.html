@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>Gharnata | Details Commande</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- site icon -->
+    <link rel="icon" href="/assets/images/logo/logo_icon.png" type="image/png" />
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <!-- site css -->
+    <link rel="stylesheet" href="/assets/style.css" />
+    <!-- responsive css -->
+    <link rel="stylesheet" href="/assets/css/responsive.css" />
+    <!-- color css -->
+    <link rel="stylesheet" href="/assets/css/colors.css" />
+    <!-- select bootstrap -->
+    <link rel="stylesheet" href="/assets/css/bootstrap-select.css" />
+    <!-- scrollbar css -->
+    <link rel="stylesheet" href="/assets/css/perfect-scrollbar.css" />
+    <!-- custom css -->
+    <link rel="stylesheet" href="/assets/css/custom.css" />
+    <!-- calendar file css -->
+    <link rel="stylesheet" href="/assets/js/semantic.min.css" />
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="inner_page invoice_page">
+<div class="full_container">
+    <div class="inner_container">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar_blog_1">
+                <div class="sidebar-header">
+                    <div class="logo_section">
+                        <a th:href="@{/gharnata/}"><img class="logo_icon img-responsive" src="/assets/images/logo/logo_icon.png" alt="Carrelage Gharnata logo" /></a>
+                    </div>
+                </div>
+                <div class="sidebar_user_info">
+                    <div class="icon_setting"></div>
+                    <div class="user_profle_side">
+                        <div class="user_img"><img class="img-responsive" src="/images/profile.png" alt="user image" /></div>
+                        <div class="user_info">
+                            <h6 th:text="${#authentication.name}"></h6>
+                            <p><span class="online_animation"></span> Online</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar_blog_2">
+                <ul class="list-unstyled components">
+                    <li class="active">
+                        <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-cubes yellow_color"></i> <span>Produits</span></a>
+                        <ul class="collapse list-unstyled" id="dashboard">
+                            <li>
+                                <a th:href="@{/gharnata/show-products}"><i class="fa fa-cube yellow_color"></i> <span>Afficher les produits</span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{/gharnata/add-product}"><i class="fa fa-plus yellow_color"></i> <span>Ajouter un Produit</span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{/gharnata/modify-product}"><i class="fa fa-edit yellow_color"></i> <span>Modifier un Produit</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a th:href="@{/gharnata/show-commands}"><i class="fa fa-archive blue1_color"></i> <span>Commandes</span></a></li>
+                    <li><a th:href="@{/gharnata/list-clients}"><i class="fa fa-group purple_color2"></i> <span>Clients</span></a></li>
+                    <li><a th:href="@{/gharnata/pass-mass}"><i class="fa fa-bolt red_color"></i> <span>Produits en Masse</span></a></li>
+                    <li><a th:href="@{/gharnata/sim-fac}"><i class="fa fa-pencil green_color"></i> <span>Simuler  une facture</span></a></li>
+                    <li>
+                        <a href="#operations" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-diamond orange_color"></i> <span>Opérations</span></a>
+                        <ul class="collapse list-unstyled" id="operations">
+                            <li><a href="#" data-toggle="modal" data-target="#addCat"><i class="fa fa-plus orange_color"></i> <span>Ajouter une Catégorie</span></a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#loadProds"><i class="fa fa-download orange_color"></i> <span>Télécharger les Produits</span></a></li>
+                            <li><a th:href="@{/gharnata/show-products-stock}"><i class="fa fa-cubes orange_color"></i> <span>Liste des Produits</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- end sidebar -->
+        <!-- right content -->
+        <div id="content">
+            <!-- topbar -->
+            <div class="topbar">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <div class="full">
+                        <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
+                        <div class="logo_section">
+                            <a th:href="@{/gharnata/}"><img class="img-responsive" src="/assets/images/logo/logo.png" alt="Carrelage Gharnata logo" /></a>
+                        </div>
+                        <div class="right_topbar">
+                            <div class="icon_info">
+                                <ul>
+                                    <li><a th:href="@{/gharnata/notif-stock}"><i class="fa fa-bell-o"></i><span th:if="${notif !=0}" class="badge" th:text="${notif}"></span></a></li>
+                                </ul>
+                                <ul class="user_profile_dd">
+                                    <li>
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><img class="img-responsive rounded-circle" src="/images/profile.png" alt="user image" /><span class="name_user" th:text="${#authentication.name}"></span></a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" th:href="@{/logout}"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <!-- end topbar -->
+            <!-- dashboard inner -->
+            <div class="midde_cont">
+                <div class="container-fluid">
+                    <div class="row column_title">
+                        <div class="col-md-12">
+                            <div class="page_title">
+                                <h2 th:text="${'Détails de la commande nº'+ commande.id}"></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- row -->
+                    <div class="row">
+                        <!-- invoice section -->
+                        <div class="col-md-12">
+                            <div class="white_shd full margin_bottom_30">
+                                <a th:if="${!commande.isConfirme()}" th:href="@{/gharnata/supp-comand/{id}(id=${commande.id})}" onclick="return confirm('Voulez vous vraiment Supprimer la commande ?');"><button class="btn cur-p btn-danger" style="float: right"><i class="fa fa-times"></i> Supprimer la commande </button></a>
+                                <div class="full">
+                                    <div class="invoice_inner">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="full invoice_blog padding_infor_info padding-bottom_0">
+                                                    <h4 th:if="${commande.getClient().isSuprimme()}" th:text="${'STE : '+commande.getClient().ste}"></h4>
+                                                    <a th:if="${!commande.getClient().isSuprimme()}" th:href="@{/gharnata/client-details/{id}(id=${commande.getClient().getId()})}"><h4 th:text="${'STE : '+commande.getClient().ste}"></h4></a>
+                                                    <p th:if="${commande.getClient().type== 'societe'}">
+                                                        <strong>I.C.E : </strong><span th:text="${commande.getClient().ice}"></span>
+                                                    </p>
+                                                    <p th:if="${commande.getClient().type== 'personne'}">
+                                                        <strong>C.I.N : </strong><span th:text="${commande.getClient().ice}"></span>
+                                                    </p>
+                                                    <p>
+                                                        <strong>Tél : </strong><a th:href="${'tel:'+ commande.getClient().tel}"><span th:text="${commande.getClient().tel}"></span></a><br>
+                                                        <strong>Adresse : </strong><span th:text="${commande.getClient().adresse}"></span><br>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="full invoice_blog padding_infor_info padding-bottom_0" th:if="${(!commande.isPaye()) && commande.isConfirme()}">
+                                                    <button type="button" class="model_bt btn btn-primary" data-toggle="modal" data-target="#facPers"><i class="fa fa-dollar"></i> Payer</button>
+                                                </div>
+                                                <div class="full invoice_blog padding_infor_info padding-bottom_0" th:if="${commande.isPaye()}">
+                                                    <h4>État : Payée</h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="full invoice_blog padding_infor_info padding-bottom_0">
+                                                    <h4>Confirmée : <span th:if="${commande.isConfirme()}">Oui</span><span th:if="${!commande.isConfirme()}">Non</span></h4>
+                                                    <th:block th:if="${!commande.isConfirme()}">
+                                                            <a th:href="@{/gharnata/confirme-cmd/1/{id}(id=${commande.id})}" th:onclick="return confirm('Confirmer la commande nº ' + /*[[${commande.id + ' de '+commande.getClient().ste}]]*/);">
+                                                                <button class="btn cur-p btn-primary"><i class="fa fa-check"></i> Confirmer</button>
+                                                            </a>
+                                                    </th:block>
+                                                    <span th:if="${commande.isConfirme()}" th:text="${'Date de confirmation : '+commande.dateConfirmation}"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="full padding_infor_info">
+                                    <div class="table_row">
+                                        <div class="table-responsive">
+                                            <div th:if="${error}" class="alert alert-danger" role="alert" id="error-message">
+                                                <p th:text="${error}"></p>
+                                                <th:block th:if="${qteEnHold != 0}">
+                                                    <p th:text="${qteEnHold + ' pièce(s) se trouvent dans les commandes non confirmées suivantes :'}"></p>
+                                                    <th:block th:each="lc : ${lcP}">
+                                                        <p><a th:href="@{/gharnata/command-details/{id}(id=${lc.id})}" th:text="${'commande nº '+ lc.id}" target="_blank"></a></p>
+                                                    </th:block>
+                                                </th:block>
+                                            </div>
+                                            <table class="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th>Référence</th>
+                                                    <th>Désignation</th>
+                                                    <th>Quantité</th>
+                                                    <th>Prix unitaire</th>
+                                                    <th>Montant HT</th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <th:block th:each="ligne : ${lignes}">
+                                                    <tr>
+                                                        <td th:text="${ligne.ref}"></td>
+                                                        <td th:text="${ligne.productName}"></td>
+                                                        <td th:text="${ligne.quantity}"></td>
+                                                        <td th:text="${ligne.prixVente}"></td>
+                                                        <td th:text="${ligne.montant}"></td>
+                                                        <td>
+                                                            <a th:if="${!commande.isConfirme()}" th:href="@{/gharnata/delete-ligne-commande/{id}(id=${ligne.id})}" onclick="return confirm('Voulez vous vraiment supprimer cet ligne ?');">
+                                                                <button class="btn cur-p btn-danger" style="text-align: right;"><i class="fa fa-trash"></i></button>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </th:block>
+                                                <tr>
+                                                    <td></td><td></td><td></td><td></td><td></td>
+                                                    <td th:if="${!commande.isConfirme()}">
+                                                        <a href="#" data-toggle="modal" data-target="#addProdd"><button class="btn cur-p btn-primary" style="text-align: right;"><i class="fa fa-plus"></i></button></a>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="full">
+                                    <div class="invoice_inner">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="full invoice_blog padding_infor_info padding-bottom_0">
+                                                    <h4 th:text="${'Montant HT : '+commande.montantHT + ' DH'}"></h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="full invoice_blog padding_infor_info padding-bottom_0">
+                                                    <h4 th:text="${'TVA (20%) : '+commande.getMTVA() + ' DH'}"></h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="full invoice_blog padding_infor_info padding-bottom_0">
+                                                    <h4 th:text="${'Montant TTC : '+commande.montantTTC + ' DH'}"></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" >
+                                            <div class="col-md-4">
+                                                <div class="read_more">
+                                                    <div class="center"><a class="main_bt read_bt" href="#genBon" data-toggle="modal" data-target="#genBon" ><i class="fa fa-download"></i> Générer un bon</a></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="read_more">
+                                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4" th:if="${commande.isConfirme()}">
+                                                <div class="full invoice_blog padding_infor_info padding-bottom_0" th:if="${credit>0}">
+                                                    <h4 style="color: #9F3A38">Reste dû : <span th:text="${credit + ' dh'}"></span></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- footer -->
+                <div class="container-fluid">
+                    <div class="footer">
+                        <p>Copyright © 2023 Carrelage Gharnata.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- end dashboard inner -->
+        </div>
+    </div>
+        <!-- model popup -->
+        <!-- The Modal -->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" th:text="${'Payer la commande nº '+ commande.id}"></h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <form method="post" role="form" th:action="@{/gharnata/pay-comand}">
+                        <div class="modal-body">
+                            <input type="hidden" name="id" th:value="${commande.id}">
+                            <label th:text="${'Montant HT : '+commande.montantHT + ' DH'}"></label>
+                            <div class="form-group">
+                                <select class="form-control" id="modPai" name="modPai" onchange="updateTextField()" required>
+                                    <option value="">Mode de Paiement</option>
+                                    <option value="Virement">Virement</option>
+                                    <option value="Chèque">Chèque</option>
+                                    <option value="Espèces">Espèces</option>
+                                    <option value="Effet">Effet</option>
+                                </select>
+                                <input class="form-control" type="text" id="pInfo" name="pInfo" disabled required>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" ><i class="fa fa-dollar"></i> Payer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end model popup -->
+        <!-- The Modal 1-->
+        <div class="modal fade" id="addCat">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Ajouter une nouvelle Catégorie</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <form method="post" role="form" th:action="@{/gharnata/add-categorie}">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="cat" placeholder="Catégorie..." name="cat" required>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" ><i class="fa fa-plus"></i> Ajouter</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end model popup -->
+        <!-- The Modal 2-->
+        <div class="modal fade" id="loadProds">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Télécharger Liste des Produits</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <form method="post" role="form" th:action="@{/gharnata/load-prods}">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="idCat">Catégorie :</label>
+                                <select class="form-control" name="idCat" id="idCat"  required>
+                                    <option value="0">Tous les catégories</option>
+                                    <th:block th:each="cat : ${cats}">
+                                        <option th:value="${cat.id}" th:text="${cat.lib}"></option>
+                                    </th:block>
+                                </select><br>
+                                <table width="50%">
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label><input type="checkbox" id="qt" name="qt" checked>  Qte</label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label><input type="checkbox" id="pr" name="pr" checked> Prix</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" ><i class="fa fa-download"></i> Telecharger</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end model popup -->
+        <!-- The Modal 3 addProduit-->
+        <div class="modal fade" id="addProdd">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" th:text="${'Ajouter un produit au commande nº '+commande.id}"> </h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <form method="post" role="form" th:action="@{/gharnata/add-prd-to-command}">
+                        <input type="hidden" name="id" th:value="${commande.id}">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="p">Produit :</label>
+                                <input list="refs" class="form-control" name="ref"  id="p"  placeholder="Réference..." required autofocus>
+                                <td ><input type="number" class="form-control" placeholder="Quantité" name="qte" min="1" required></td>
+                                <datalist id="refs">
+                                    <th:block th:each="pI : ${prodInfo}">
+                                        <option th:value="${pI.ref}" th:text="${pI.nom}" ></option>
+                                    </th:block>
+                                </datalist>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" ><i class="fa fa-plus"></i> Ajouter</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end model popup -->
+        <!-- The Modal 4 generBon-->
+        <div class="modal fade" id="genBon">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" th:text="${'Générer un Bon pour la commande nº '+commande.id}"> </h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <form method="post" role="form" th:action="@{/gharnata/generateBon}">
+                        <input type="hidden" name="id" th:value="${commande.id}">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label><input type="checkbox" id="rap" name="rap" checked> Rappel</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" ><i class="fa fa-download"></i> Generer un Bon</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end model popup -->
+        <!-- The Modal 5-->
+        <div class="modal fade" id="facPers">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Payer + Générer la Facture</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <form method="post" role="form" th:action="@{/gharnata/pay-cmd}" onsubmit="setTimeout(() => location.reload(), 1000);">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input list="clits" class="form-control" name="client_id"  th:value="${commande.getClient().getId()}" th:text="${commande.getClient().getSte()}" required >
+                                <datalist id="clits">
+                                    <th:block th:each="client : ${clients}">
+                                        <option th:value="${client.getId()}" th:text="${client.getSte()}"></option>
+                                    </th:block>
+                                </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="mt">Montant :</label>
+                                <input class="form-control" name="mt" id="mt" th:value="${credit}"  required autofocus/>
+                                <input type="hidden" name="id" th:value="${commande.id}">
+                                <div class="form-group">
+                                    <select class="form-control" name="modPai" id="mdP" onchange="updateTextField()" required>
+                                        <option value="">Mode de Paiement</option>
+                                        <option value="Virement">Virement</option>
+                                        <option value="Chèque">Chèque</option>
+                                        <option value="Espèces">Espèces</option>
+                                        <option value="Effet">Effet</option>
+                                    </select>
+                                    <input class="form-control" type="text" name="pInfo" id="pIf" disabled required>
+                                </div>
+                                <br>
+                                <table width="50%">
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label><input type="checkbox" id="tmp" name="tmp" checked> Tamponnée</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" ><i class="fa fa-dollar"></i> Payer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end model popup -->
+        <script>
+            function updateTextField() {
+                // Récupérer la balise select
+                var selectBox = document.getElementById("modPai");
+
+                // Récupérer la balise input texte
+                var resultField = document.getElementById("pInfo");
+
+                // Mettre à jour la valeur de l'input texte avec la valeur sélectionnée de la balise select
+                var selectedOption = selectBox.options[selectBox.selectedIndex];
+                resultField.value = selectedOption.value + " - ";
+
+                // Désactiver l'input texte si aucune option n'est sélectionnée
+                resultField.disabled = (selectedOption.value === "");
+            }
+        </script>
+        <script>
+            function updateTextField() {
+                // Récupérer la balise select
+                var selectBox = document.getElementById("mdP");
+
+                // Récupérer la balise input texte
+                var resultField = document.getElementById("pIf");
+
+                // Mettre à jour la valeur de l'input texte avec la valeur sélectionnée de la balise select
+                var selectedOption = selectBox.options[selectBox.selectedIndex];
+                resultField.value = selectedOption.value + " - ";
+
+                // Désactiver l'input texte si aucune option n'est sélectionnée
+                resultField.disabled = (selectedOption.value === "");
+            }
+        </script>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            /* vérifie si une erreur est présente */
+            [[${message != null}]] ? alert([[${message}]]) : '';
+            /*]]>*/
+        </script>
+        <script>
+            function showErrorMessage() {
+                const message = document.getElementById('error-message');
+                message.style.display = 'block';
+
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 7000); // 5000 ms = 5 secondes
+            }
+
+            // Appel de la fonction quand le produit est en rupture de stock
+            showErrorMessage();
+        </script>
+    </div>
+</div>
+<!-- jQuery -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<!-- wow animation -->
+<script src="/assets/js/animate.js"></script>
+<!-- select country -->
+<script src="/assets/js/bootstrap-select.js"></script>
+<!-- owl carousel -->
+<script src="/assets/js/owl.carousel.js"></script>
+<!-- chart js -->
+<script src="/assets/js/Chart.min.js"></script>
+<script src="/assets/js/Chart.bundle.min.js"></script>
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/analyser.js"></script>
+<!-- nice scrollbar -->
+<script src="/assets/js/perfect-scrollbar.min.js"></script>
+<script>
+    var ps = new PerfectScrollbar('#sidebar');
+</script>
+<!-- fancy box js -->
+<script src="/assets/js/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/jquery.fancybox.min.js"></script>
+<!-- custom js -->
+<script src="/assets/js/custom.js"></script>
+<!-- calendar file css -->
+<script src="/assets/js/semantic.min.js"></script>
+</body>
+</html>

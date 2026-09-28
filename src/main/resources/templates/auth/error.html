@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Page d'erreur de Gharnata">
+    <title th:text="${'Erreur '+code+' - Gharnata'}">Erreur - ÉTABLISSEMENT NAYAZIK PRIVÉ</title>
+    <link rel="icon" href="/assets/images/logo/logo_icon.png" type="image/png">
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+    <style>
+        :root {
+            --ink: #172033;
+            --muted: #7e889d;
+            --navy: #1c2742;
+            --blue: #3977f6;
+            --blue-dark: #2b61d0;
+            --blue-soft: #edf3ff;
+            --red: #e45f68;
+            --red-soft: #fff0f1;
+            --line: #e8ebf2;
+            --surface: #fff;
+            --canvas: #f5f7fb;
+            --shadow: 0 24px 65px rgba(25, 40, 76, .14)
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--canvas);
+            color: var(--ink);
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif
+        }
+
+        .error-shell {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            isolation: isolate;
+            overflow: hidden
+        }
+
+        .background-ambient {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            overflow: hidden;
+            pointer-events: none;
+            background: radial-gradient(circle at 12% 18%, rgba(57, 119, 246, .09), transparent 27%), radial-gradient(circle at 88% 78%, rgba(118, 160, 255, .1), transparent 30%), var(--canvas)
+        }
+
+        .background-ambient:before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: .34;
+            background-image: linear-gradient(rgba(57, 119, 246, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(57, 119, 246, .07) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent)
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(1px);
+            opacity: .48;
+            mix-blend-mode: multiply
+        }
+
+        .orb-one {
+            width: 250px;
+            height: 250px;
+            left: -70px;
+            top: 17%;
+            background: radial-gradient(circle at 35% 35%, rgba(57, 119, 246, .25), rgba(57, 119, 246, 0));
+            animation: floatOne 13s ease-in-out infinite alternate
+        }
+
+        .orb-two {
+            width: 320px;
+            height: 320px;
+            right: -115px;
+            bottom: 4%;
+            background: radial-gradient(circle at 60% 40%, rgba(99, 201, 159, .19), rgba(99, 201, 159, 0));
+            animation: floatTwo 16s ease-in-out infinite alternate
+        }
+
+        .orb-three {
+            width: 150px;
+            height: 150px;
+            right: 23%;
+            top: -75px;
+            background: radial-gradient(circle, rgba(228, 95, 104, .13), rgba(228, 95, 104, 0));
+            animation: floatThree 11s ease-in-out infinite alternate
+        }
+
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(57, 119, 246, .42);
+            box-shadow: 0 0 16px rgba(57, 119, 246, .35);
+            animation: drift 9s ease-in-out infinite
+        }
+
+        .particle-a {
+            left: 14%;
+            top: 30%;
+            animation-delay: -2s
+        }
+
+        .particle-b {
+            left: 81%;
+            top: 25%;
+            animation-delay: -5s
+        }
+
+        .particle-c {
+            left: 72%;
+            bottom: 22%;
+            animation-delay: -1s
+        }
+
+        .particle-d {
+            left: 28%;
+            bottom: 14%;
+            animation-delay: -7s
+        }
+
+        .particle-e {
+            left: 51%;
+            top: 13%;
+            width: 3px;
+            height: 3px;
+            animation-delay: -4s
+        }
+
+        @keyframes floatOne {
+            to {
+                transform: translate(100px, 38px) scale(1.14)
+            }
+        }
+
+        @keyframes floatTwo {
+            to {
+                transform: translate(-85px, -55px) scale(.88)
+            }
+        }
+
+        @keyframes floatThree {
+            to {
+                transform: translate(-35px, 90px) scale(1.22)
+            }
+        }
+
+        @keyframes drift {
+            0%, 100% {
+                transform: translate(0, 0);
+                opacity: .32
+            }
+            50% {
+                transform: translate(18px, -27px);
+                opacity: .85
+            }
+        }
+
+        .topbar {
+            height: 76px;
+            background: rgba(255, 255, 255, .88);
+            border-bottom: 1px solid rgba(232, 235, 242, .9);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            backdrop-filter: blur(14px)
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            text-decoration: none;
+            color: var(--ink)
+        }
+
+        .brand img {
+            width: 39px;
+            height: 39px;
+            object-fit: contain;
+            background: var(--navy);
+            border-radius: 11px;
+            padding: 5px
+        }
+
+        .brand strong {
+            display: block;
+            font-size: 16px;
+            line-height: 1.1
+        }
+
+        .brand small {
+            display: block;
+            color: var(--muted);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-top: 3px
+        }
+
+        .context {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 600
+        }
+
+        .context i {
+            color: var(--blue);
+            margin-right: 6px
+        }
+
+        .error-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 45px 20px
+        }
+
+        .error-card {
+            width: 100%;
+            max-width: 940px;
+            background: rgba(255, 255, 255, .91);
+            border: 1px solid rgba(232, 235, 242, .95);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            padding: 42px 48px;
+            display: grid;
+            grid-template-columns:43% 57%;
+            gap: 35px;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            animation: cardEnter .7s cubic-bezier(.2, .8, .2, 1) both
+        }
+
+        @keyframes cardEnter {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(.98)
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1)
+            }
+        }
+
+        .visual {
+            position: relative;
+            min-height: 330px;
+            border-radius: 17px;
+            background: linear-gradient(145deg, rgba(248, 250, 255, .92), rgba(237, 243, 255, .85));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 24px
+        }
+
+        .visual:before, .visual:after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(57, 119, 246, .14)
+        }
+
+        .visual:before {
+            width: 300px;
+            height: 300px;
+            top: -145px;
+            right: -100px;
+            animation: visualRing 10s ease-in-out infinite alternate
+        }
+
+        .visual:after {
+            width: 220px;
+            height: 220px;
+            bottom: -120px;
+            left: -90px;
+            animation: visualRing 13s ease-in-out infinite alternate-reverse
+        }
+
+        @keyframes visualRing {
+            to {
+                transform: translate(22px, 16px) scale(1.08)
+            }
+        }
+
+        .visual img {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 330px;
+            height: auto;
+            max-height: 285px;
+            object-fit: contain;
+            filter: drop-shadow(0 18px 18px rgba(39, 63, 115, .14));
+            animation: imageFloat 5s ease-in-out infinite
+        }
+
+        @keyframes imageFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(-1deg)
+            }
+            50% {
+                transform: translateY(-8px) rotate(1deg)
+            }
+        }
+
+        .copy {
+            padding: 10px 0
+        }
+
+        .eyebrow {
+            display: inline-block;
+            color: var(--red);
+            background: var(--red-soft);
+            border-radius: 20px;
+            padding: 7px 11px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 18px
+        }
+
+        .error-code {
+            font-size: 76px;
+            line-height: .92;
+            letter-spacing: -4px;
+            color: var(--navy);
+            font-weight: 850;
+            margin: 0 0 17px
+        }
+
+        .error-title {
+            font-size: 27px;
+            line-height: 1.25;
+            letter-spacing: -.6px;
+            font-weight: 750;
+            margin: 0 0 13px
+        }
+
+        .error-desc {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.75;
+            margin: 0 0 27px;
+            max-width: 390px
+        }
+
+        .btn-custom {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            background: var(--blue);
+            color: #fff;
+            border-radius: 9px;
+            padding: 0 18px;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 750;
+            box-shadow: 0 8px 17px rgba(57, 119, 246, .21);
+            transition: .2s
+        }
+
+        .btn-custom:hover {
+            background: var(--blue-dark);
+            color: #fff;
+            transform: translateY(-1px)
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            margin-left: 8px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            background: rgba(255, 255, 255, .85);
+            color: #65728a;
+            padding: 0 16px;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 700
+        }
+
+        .back-btn:hover {
+            border-color: #a9c1f7;
+            color: var(--blue)
+        }
+
+        .footer {
+            text-align: center;
+            color: #a2aabd;
+            font-size: 10px;
+            padding: 0 0 25px
+        }
+
+        @media (max-width: 720px) {
+            .topbar {
+                height: 68px;
+                padding: 0 19px
+            }
+
+            .context {
+                font-size: 0
+            }
+
+            .context i {
+                font-size: 16px;
+                margin: 0
+            }
+
+            .error-main {
+                padding: 24px 16px
+            }
+
+            .error-card {
+                grid-template-columns:1fr;
+                gap: 27px;
+                padding: 25px 20px
+            }
+
+            .visual {
+                order: 0;
+                min-height: 220px
+            }
+
+            .copy {
+                order: 1;
+                text-align: center
+            }
+
+            .error-desc {
+                margin-left: auto;
+                margin-right: auto
+            }
+
+            .error-code {
+                font-size: 64px
+            }
+
+            .error-title {
+                font-size: 23px
+            }
+
+            .back-btn {
+                margin-left: 5px
+            }
+        }
+
+        @media (max-width: 430px) {
+            .visual {
+                min-height: 180px
+            }
+
+            .error-code {
+                font-size: 58px
+            }
+
+            .btn-custom, .back-btn {
+                width: 100%;
+                margin: 0 0 9px
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *:before, *:after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important
+            }
+        }
+    </style>
+
+    <!-- PWA -->
+    <link rel="manifest" th:href="@{/manifest.json}">
+
+    <meta name="theme-color" content="#0d6efd">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Gestion de stock">
+
+    <link rel="apple-touch-icon"
+          th:href="@{/icons/icon-192.png}">
+</head>
+<body>
+<div class="error-shell">
+    <div class="background-ambient" aria-hidden="true">
+        <span class="orb orb-one"></span>
+        <span class="orb orb-two"></span>
+        <span class="orb orb-three"></span>
+        <span class="particle particle-a"></span>
+        <span class="particle particle-b"></span>
+        <span class="particle particle-c"></span>
+        <span class="particle particle-d"></span>
+        <span class="particle particle-e"></span>
+    </div>
+    <header class="topbar">
+        <a class="brand" href="/">
+            <img src="/assets/images/logo/logo_icon.png" alt="Gharnata">
+            <span><strong>Gharnata</strong><small>Gestion de stock</small></span>
+        </a>
+        <span class="context">
+            <i class="fa fa-shield"></i> Page sécurisée
+        </span>
+    </header>
+    <main class="error-main">
+        <section class="error-card" aria-labelledby="error-title">
+            <div class="visual">
+                <img src="/images/4041.png" alt="Illustration de page d'erreur">
+            </div>
+            <div class="copy">
+                <span class="eyebrow">Erreur de navigation</span>
+                <div class="error-code" th:text="${code}">404</div>
+                <h1 class="error-title" id="error-title" th:text="${message}">Une erreur est survenue.</h1>
+                <p class="error-desc">Vous pouvez cliquer sur le bouton ci-dessous pour retourner à la page
+                    d'accueil.</p>
+                <a href="/" class="btn-custom">
+                    <i class="fa fa-home"></i> Tableau de bord</a>
+                <button type="button" class="back-btn" onclick="history.back()">
+                    <i class="fa fa-arrow-left"></i> Page précédente
+                </button>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">© 2026 Gharnata · Gestion de stock</footer>
+</div>
+<script>
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+            navigator.serviceWorker.register("/service-worker.js")
+                .then(function (registration) {
+                    console.log(
+                        "Service Worker enregistré :",
+                        registration.scope
+                    );
+                })
+                .catch(function (error) {
+                    console.error(
+                        "Erreur Service Worker :",
+                        error
+                    );
+                });
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+<span th:fragment="feedback">
+    <span th:if="${existe}" style="color:#e45f68; font-size:11px; display:block; margin-top:6px;">
+        <i class="fa fa-exclamation-circle"></i> <th:block th:text="${'Ce ICE existe déjà lié au client : '+ name}"></th:block>
+    </span>
+</span>

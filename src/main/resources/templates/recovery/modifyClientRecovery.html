@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- basic -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- mobile metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <!-- site metas -->
+  <title>Gharnata | Modifier Client</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- site icon -->
+  <link rel="icon" href="/assets/images/logo/logo_icon.png" type="image/png" />
+  <!-- bootstrap css -->
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+  <!-- site css -->
+  <link rel="stylesheet" href="/assets/style.css" />
+  <!-- responsive css -->
+  <link rel="stylesheet" href="/assets/css/responsive.css" />
+  <!-- color css -->
+  <link rel="stylesheet" href="/assets/css/colors.css" />
+  <!-- select bootstrap -->
+  <link rel="stylesheet" href="/assets/css/bootstrap-select.css" />
+  <!-- scrollbar css -->
+  <link rel="stylesheet" href="/assets/css/perfect-scrollbar.css" />
+  <!-- custom css -->
+  <link rel="stylesheet" href="/assets/css/custom.css" />
+  <!-- calendar file css -->
+  <link rel="stylesheet" href="/assets/js/semantic.min.css" />
+  <!-- fancy box js -->
+  <link rel="stylesheet" href="/assets/css/jquery.fancybox.css" />
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body class="inner_page media_gallery">
+<div class="full_container">
+  <div class="inner_container">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+      <div class="sidebar_blog_1">
+        <div class="sidebar-header">
+          <div class="logo_section">
+            <a th:href="@{/gharnata/}"><img class="logo_icon img-responsive" src="/assets/images/logo/logo_icon.png" alt="Carrelage Gharnata logo" /></a>
+          </div>
+        </div>
+        <div class="sidebar_user_info">
+          <div class="icon_setting"></div>
+          <div class="user_profle_side">
+            <div class="user_img"><img class="img-responsive" src="/images/profile.png" alt="user image" /></div>
+            <div class="user_info">
+              <h6 th:text="${#authentication.name}"></h6>
+              <p><span class="online_animation"></span> Online</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar_blog_2">
+        <ul class="list-unstyled components">
+          <li class="active">
+            <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-cubes yellow_color"></i> <span>Produits</span></a>
+            <ul class="collapse list-unstyled" id="dashboard">
+              <li>
+                <a th:href="@{/gharnata/show-products}"><i class="fa fa-cube yellow_color"></i> <span>Afficher les produits</span></a>
+              </li>
+              <li>
+                <a th:href="@{/gharnata/add-product}"><i class="fa fa-plus yellow_color"></i> <span>Ajouter un Produit</span></a>
+              </li>
+              <li>
+                <a th:href="@{/gharnata/modify-product}"><i class="fa fa-edit yellow_color"></i> <span>Modifier un Produit</span></a>
+              </li>
+            </ul>
+          </li>
+          <li><a th:href="@{/gharnata/show-commands}"><i class="fa fa-archive blue1_color"></i> <span>Commandes</span></a></li>
+          <li><a th:href="@{/gharnata/list-clients}"><i class="fa fa-group purple_color2"></i> <span>Clients</span></a></li>
+          <li><a th:href="@{/gharnata/pass-mass}"><i class="fa fa-bolt red_color"></i> <span>Produits en Masse</span></a></li>
+          <li><a th:href="@{/gharnata/sim-fac}"><i class="fa fa-pencil green_color"></i> <span>Simuler  une facture</span></a></li>
+          <li>
+            <a href="#operations" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-diamond orange_color"></i> <span>Opérations</span></a>
+            <ul class="collapse list-unstyled" id="operations">
+              <li><a href="#" data-toggle="modal" data-target="#addCat"><i class="fa fa-plus orange_color"></i> <span>Ajouter une Catégorie</span></a></li>
+              <li><a href="#" data-toggle="modal" data-target="#loadProds"><i class="fa fa-download orange_color"></i> <span>Télécharger les Produits</span></a></li>
+              <li><a th:href="@{/gharnata/show-products-stock}"><i class="fa fa-cubes orange_color"></i> <span>Liste des Produits</span></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- end sidebar -->
+    <!-- right content -->
+    <div id="content">
+      <!-- topbar -->
+      <div class="topbar">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <div class="full">
+            <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
+            <div class="logo_section">
+              <a th:href="@{/gharnata/}"><img class="img-responsive" src="/assets/images/logo/logo.png" alt="Carrelage Gharnata logo" /></a>
+            </div>
+            <div class="right_topbar">
+              <div class="icon_info">
+                <ul>
+                  <li><a th:href="@{/gharnata/notif-stock}"><i class="fa fa-bell-o"></i><span th:if="${notif !=0}" class="badge" th:text="${notif}"></span></a></li>
+                </ul>
+                <ul class="user_profile_dd">
+                  <li>
+                    <a class="dropdown-toggle" data-toggle="dropdown"><img class="img-responsive rounded-circle" src="/images/profile.png" alt="user image" /><span class="name_user" th:text="${#authentication.name}"></span></a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" th:href="@{/logout}"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <!-- end topbar -->
+      <!-- dashboard inner -->
+      <div class="midde_cont">
+        <div class="container-fluid">
+          <div class="row column_title">
+            <div class="col-md-12">
+              <div class="page_title">
+                <h2 th:text="${'Modifier le Client : ' + cls.getSte()}"></h2>
+              </div>
+            </div>
+          </div>
+          <!-- row -->
+          <div class="row column4 graph">
+            <!-- Gallery section -->
+            <div class="col-md-12">
+              <div class="white_shd full margin_bottom_30">
+                <div class="full gallery_section_inner padding_infor_info">
+                  <div>
+                    <form class="wowload fadeInRight" method="post" role="form" th:action="@{/gharnata/modify-client}">
+                      <div th:if="${error}" class="alert alert-danger" role="alert">
+                        <p th:text="${error}"></p>
+                      </div>
+                      <div th:if="${success}" class="alert alert-success">
+                        <p th:text="${success}"></p>
+                      </div>
+                      <div class="form-group">
+                        <input type="hidden" id="initialType" th:value="${cls.type}">
+                        <input type="hidden" id="initialIce" th:value="${cls.ice}">
+                        <label for="ice" id="lice">I.C.E :</label>
+                        <input type="text" class="form-control" id="ice" placeholder="ICE..." th:value="${cls.ice}" th:data-ice="${cls.ice}" name="ice" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="ste" id="lste" >Raison sociale :</label>
+                        <input type="text" class="form-control" id="ste"  placeholder="Nom / Raison Sociale..." th:value="${cls.ste}" name="ste" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="adr">Adresse :</label>
+                        <input type="text" class="form-control" id="adr" placeholder="Adresse..." th:value="${cls.adresse}"  name="adresse">
+                      </div>
+                      <div class="form-group">
+                        <label for="tel">Telephone :</label>
+                        <input type="text" class="form-control" id="tel" placeholder="Telephone..." th:value="${cls.tel}" name="tel">
+                      </div>
+                      <div class="form-group">
+                        <label>Type de client :</label><br>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="type1" name="type" value="societe"
+                                 th:checked="${cls.type == 'societe'}" required>
+                          <strong><label for="type1">Société</label></strong>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="type2" name="type" value="personne"
+                                 th:checked="${cls.type == 'personne'}" required>
+                          <strong><label for="type2">Personne</label></strong>
+                        </div>
+                      </div>
+                      <input type="hidden" id="id"th:value="${cls.id}" name="id" required>
+                      <button class="btn cur-p btn-primary" type="submit"><i class="fa fa-edit"></i> Modifier</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--<script>
+            function toggleICE() {
+              const iceInput = document.getElementById("ice");
+              const type2 = document.getElementById("type2");
+
+              if (type2.checked) {
+                iceInput.readOnly = true;
+                iceInput.removeAttribute("required");
+                /*iceInput.value = "";*/
+              } else {
+                iceInput.readOnly = false;
+                iceInput.setAttribute("required", "required");
+              }
+            }
+
+            // Exécute au chargement de la page
+            window.onload = toggleICE;
+          </script>-->
+          <script>
+            document.addEventListener("DOMContentLoaded", function () {
+              const type1 = document.getElementById("type1"); // Société
+              const type2 = document.getElementById("type2"); // Personne
+              const iceField = document.getElementById("ice");
+              const initialType = document.getElementById("initialType");
+              const initialIce = document.getElementById("initialIce");
+              const labelIce = document.getElementById("lice");
+              const labelSte = document.getElementById("lste");
+              const inputSte = document.getElementById("ste");
+              function updateICEField() {
+                if (type2.checked && initialType.value === "societe") {
+                  labelIce.innerText = "C.I.N :";
+                  labelSte.innerText = "Nom complet :";
+                  inputSte.placeholder = "Nom complet...";
+                  iceField.placeholder = "CIN..."
+                  // Génération automatique de l'ICE
+                  const now = new Date();
+                  const timestamp = String(now.getSeconds()).padStart(2, '0')
+                          + String(now.getMinutes()).padStart(2, '0')
+                          + String(now.getHours()).padStart(2, '0')
+                          + String(now.getDate()).padStart(2, '0')
+                          + String(now.getMonth() + 1).padStart(2, '0')
+                          + now.getFullYear().toString();
+
+                  iceField.value = "cin" + timestamp; // Exemple : 20250717120543
+                } else if(type2.checked && initialType.value === "personne"){
+                  labelIce.innerText = "C.I.N :";
+                  labelSte.innerText = "Nom complet :";
+                  inputSte.placeholder = "Nom complet...";
+                  iceField.placeholder = "CIN..."
+                  iceField.value = initialIce.value;
+                }else if(type1.checked && initialType.value === "personne"){
+                  labelIce.innerText = "I.C.E :";
+                  labelSte.innerText = "Raison sociale :";
+                  inputSte.placeholder = "Raison sociale...";
+                  iceField.placeholder = "ICE...";
+                  const now = new Date();
+                  const timestamp = String(now.getSeconds()).padStart(2, '0')
+                          + String(now.getMinutes()).padStart(2, '0')
+                          + String(now.getHours()).padStart(2, '0')
+                          + String(now.getDate()).padStart(2, '0')
+                          + String(now.getMonth() + 1).padStart(2, '0')
+                          + now.getFullYear().toString();
+
+                  iceField.value = "ice" + timestamp; // Exemple : 20250717120543
+                }else if(type1.checked && initialType.value === "societe"){
+                  labelIce.innerText = "I.C.E :";
+                  labelSte.innerText = "Raison sociale :";
+                  inputSte.placeholder = "Raison sociale...";
+                  iceField.placeholder = "ICE...";
+                  iceField.value = initialIce.value;
+                }
+              }
+
+              // Initialisation
+              updateICEField();
+
+              // Événement quand on change le type
+              type1.addEventListener("change", updateICEField);
+              type2.addEventListener("change", updateICEField);
+            });
+          </script>
+          <!-- footer -->
+          <div class="container-fluid">
+            <div class="row">
+              <div class="footer">
+                <p>Copyright © 2023 Carrelage Gharnata.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end dashboard inner -->
+      </div>
+    </div>
+    <!-- model popup -->
+    <!-- The Modal 1-->
+    <div class="modal fade" id="addCat">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Ajouter une nouvelle Catégorie</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <!-- Modal body -->
+          <form method="post" role="form" th:action="@{/gharnata/add-categorie}">
+            <div class="modal-body">
+              <div class="form-group">
+                <input type="text" class="form-control" id="cat" placeholder="Catégorie..." name="cat" required>
+              </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-danger" ><i class="fa fa-plus"></i> Ajouter</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- end model popup -->
+    <!-- The Modal 2-->
+    <div class="modal fade" id="loadProds">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Télécharger Liste des Produits</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <!-- Modal body -->
+          <form method="post" role="form" th:action="@{/gharnata/load-prods}">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="idCat">Catégorie :</label>
+                <select class="form-control" name="idCat" id="idCat"  required>
+                  <option value="0">Tous les catégories</option>
+                  <th:block th:each="cat : ${cats}">
+                    <option th:value="${cat.id}" th:text="${cat.lib}"></option>
+                  </th:block>
+                </select><br>
+                <table width="50%">
+                  <tr>
+                    <td>
+                      <div class="form-group">
+                        <label><input type="checkbox" id="qt" name="qt" checked>  Qte</label>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group">
+                        <label><input type="checkbox" id="pr" name="pr" checked> Prix</label>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-danger" ><i class="fa fa-download"></i> Telecharger</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- end model popup -->
+  </div>
+</div>
+<!-- jQuery -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<!-- wow animation -->
+<script src="/assets/js/animate.js"></script>
+<!-- select country -->
+<script src="/assets/js/bootstrap-select.js"></script>
+<!-- owl carousel -->
+<script src="/assets/js/owl.carousel.js"></script>
+<!-- chart js -->
+<script src="/assets/js/Chart.min.js"></script>
+<script src="/assets/js/Chart.bundle.min.js"></script>
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/analyser.js"></script>
+<!-- nice scrollbar -->
+<script src="/assets/js/perfect-scrollbar.min.js"></script>
+<script>
+  var ps = new PerfectScrollbar('#sidebar');
+</script>
+<!-- fancy box js -->
+<script src="/assets/js/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/jquery.fancybox.min.js"></script>
+<!-- custom js -->
+<script src="/assets/js/custom.js"></script>
+<!-- calendar file css -->
+<script src="/assets/js/semantic.min.js"></script>
+</body>
+</html>

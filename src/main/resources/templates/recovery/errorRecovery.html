@@ -1,0 +1,68 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gharnata | Error 404</title>
+    <link rel="icon" href="/images/mlogo.png" type="image/png" />
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+
+    <!-- uniform -->
+    <link type="text/css" rel="stylesheet" href="/assets/css/uniform.default.min.css" />
+
+    <!-- animate.css -->
+    <link rel="stylesheet" href="/assets/css/animate.css" />
+    <style>
+        .container{
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        /*.container img{
+            width: 100%;
+            height: 100%;
+        }*/
+        .container .btn{
+            position: absolute;
+            top: 70%;
+            left: 53.5%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            color: black;
+            font-size: 16px;
+            padding: 10px 50px;
+            border: #ff5821 solid 4px;
+            cursor: pointer;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .container .btn:hover{
+            background-color: #ff5821;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <br><br><br><br><br><br>
+        <div class="row">
+            <div class="col-sm-5 col-md-6">
+                <img src="/images/4041.png" style="max-width: 100%; height: auto;">
+            </div>
+            <div class="col-sm-5 col-md-6">
+                <img src="/images/4042.png" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+        <!--<img src="/images/404.png" alt="404" height="100%" width="100%">-->
+        <br><br><br><br><br><br>
+        <div class="row">
+            <div class="col-sm-11 col-md-11">
+                <a th:href="@{/gharnata/}"><button class="btn">Home</button></a>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

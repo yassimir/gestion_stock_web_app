@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- site icon -->
+      <title>Gharnata | Login</title>
+      <link rel="icon" href="/assets/images/logo/logo_icon.png" type="image/png" />
+      <!-- bootstrap css -->
+      <link rel="stylesheet" href="/admmm/css/bootstrap.min.css" />
+      <!-- site css -->
+      <link rel="stylesheet" href="/admmm/style.css" />
+      <!-- responsive css -->
+      <link rel="stylesheet" href="/admmm/css/responsive.css" />
+      <!-- color css -->
+      <link rel="stylesheet" href="/admmm/css/colors.css" />
+      <!-- select bootstrap -->
+      <link rel="stylesheet" href="/admmm/css/bootstrap-select.css" />
+      <!-- scrollbar css -->
+      <link rel="stylesheet" href="/admmm/css/perfect-scrollbar.css" />
+      <!-- custom css -->
+      <link rel="stylesheet" href="/admmm/css/custom.css" />
+      <!-- calendar file css -->
+      <link rel="stylesheet" href="/admmm/js/semantic.min.css" />
+      <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+   </head>
+   <body class="inner_page login">
+      <div class="full_container">
+         <font size=3px> &nbsp;&nbsp; <i class="fa fa-user-secret"></i> Private Space</font>
+         <div class="container">
+            <div class="center verticle_center full_height">
+               <div class="login_section">
+                  <div class="logo_login">
+                     <div class="center">
+                        <center><font color="white" size=10px><i class="fa fa-user-secret"></i> Se Connecter</font></center>
+                     </div>
+                  </div>
+                  <div class="login_form">
+                     <form th:action="@{/login}" method="post">
+
+                        <fieldset>
+                           <div th:if="${param.error}" class="alert alert-danger">
+                              Nom d'utilisateur et mot de passe invalides
+                           </div>
+                           <div th:if="${param.logout}" class="alert alert-success">
+                              vous avez été déconnecté
+                           </div>
+                           <div class="field">
+                              <label class="label_field">Username</label>
+                              <input type="text" name="username" id="user" placeholder="Username..."  required autofocus>
+                           </div>
+                           <div class="field">
+                              <label class="label_field">Password</label>
+                              <input type="password"name="password" placeholder="Password..." required />
+                           </div>
+                           <div class="text-right">
+                              <!-- Simple link -->
+                              <a href="#!">Forgot password</a>
+                           </div>
+                           <div class="field margin_0">
+                              <label class="label_field hidden">hidden label</label>
+                              <div class="text-right"><button type="submit" class="main_bt" >se connecter</button></div>
+                           </div>
+                        </fieldset>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- jQuery -->
+      <script src="/admmm/js/jquery.min.js"></script>
+      <script src="/admmm/js/popper.min.js"></script>
+      <script src="/admmm/js/bootstrap.min.js"></script>
+      <!-- wow animation -->
+      <script src="/admmm/js/animate.js"></script>
+      <!-- select country -->
+      <script src="/admmm/js/bootstrap-select.js"></script>
+      <!-- nice scrollbar -->
+      <script src="/admmm/js/perfect-scrollbar.min.js"></script>
+      <script>
+         var ps = new PerfectScrollbar('#sidebar');
+      </script>
+      <!-- custom js -->
+      <script src="/admmm/js/custom.js"></script>
+   </body>
+</html>

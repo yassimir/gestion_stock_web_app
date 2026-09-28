@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- basic -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- mobile metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <!-- site metas -->
+  <title>Gharnata | Simuler une Facture</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- site icon -->
+  <link rel="icon" href="/assets/images/logo/logo_icon.png" type="image/png" />
+  <!-- bootstrap css -->
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+  <!-- site css -->
+  <link rel="stylesheet" href="/assets/style.css" />
+  <!-- responsive css -->
+  <link rel="stylesheet" href="/assets/css/responsive.css" />
+  <!-- color css -->
+  <link rel="stylesheet" href="/assets/css/colors.css" />
+  <!-- select bootstrap -->
+  <link rel="stylesheet" href="/assets/css/bootstrap-select.css" />
+  <!-- scrollbar css -->
+  <link rel="stylesheet" href="/assets/css/perfect-scrollbar.css" />
+  <!-- custom css -->
+  <link rel="stylesheet" href="/assets/css/custom.css" />
+  <!-- calendar file css -->
+  <link rel="stylesheet" href="/assets/js/semantic.min.css" />
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body class="inner_page project_page">
+<div class="full_container">
+  <div class="inner_container">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+      <div class="sidebar_blog_1">
+        <div class="sidebar-header">
+          <div class="logo_section" >
+            <a th:href="@{/gharnata/}"><img class="logo_icon img-responsive" src="/assets/images/logo/logo_icon.png" alt="Carrelage Gharnata logo" /></a>
+          </div>
+        </div>
+        <div class="sidebar_user_info">
+          <div class="icon_setting"></div>
+          <div class="user_profle_side">
+            <div class="user_img"><img class="img-responsive" src="/images/profile.png" alt="user image" /></div>
+            <div class="user_info">
+              <h6 th:text="${#authentication.name}"></h6>
+              <p><span class="online_animation"></span> Online</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar_blog_2">
+        <ul class="list-unstyled components">
+          <li class="active">
+            <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-cubes yellow_color"></i> <span>Produits</span></a>
+            <ul class="collapse list-unstyled" id="dashboard">
+              <li>
+                <a th:href="@{/gharnata/show-products}"><i class="fa fa-cube yellow_color"></i> <span>Afficher les produits</span></a>
+              </li>
+              <li>
+                <a th:href="@{/gharnata/add-product}"><i class="fa fa-plus yellow_color"></i> <span>Ajouter un Produit</span></a>
+              </li>
+              <li>
+                <a th:href="@{/gharnata/modify-product}"><i class="fa fa-edit yellow_color"></i> <span>Modifier un Produit</span></a>
+              </li>
+            </ul>
+          </li>
+          <li><a th:href="@{/gharnata/show-commands}"><i class="fa fa-archive blue1_color"></i> <span>Commandes</span></a></li>
+          <li><a th:href="@{/gharnata/list-clients}"><i class="fa fa-group purple_color2"></i> <span>Clients</span></a></li>
+          <li><a th:href="@{/gharnata/pass-mass}"><i class="fa fa-bolt red_color"></i> <span>Produits en Masse</span></a></li>
+          <li><a th:href="@{/gharnata/sim-fac}"><i class="fa fa-pencil green_color"></i> <span>Simuler  une facture</span></a></li>
+          <li>
+            <a href="#operations" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-diamond orange_color"></i> <span>Opérations</span></a>
+            <ul class="collapse list-unstyled" id="operations">
+              <li><a href="#" data-toggle="modal" data-target="#addCat"><i class="fa fa-plus orange_color"></i> <span>Ajouter une Catégorie</span></a></li>
+              <li><a href="#" data-toggle="modal" data-target="#loadProds"><i class="fa fa-download orange_color"></i> <span>Télécharger les Produits</span></a></li>
+              <li><a th:href="@{/gharnata/show-products-stock}"><i class="fa fa-cubes orange_color"></i> <span>Liste des Produits</span></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- end sidebar -->
+    <!-- right content -->
+    <div id="content">
+      <!-- topbar -->
+      <div class="topbar">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <div class="full">
+            <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
+            <div class="logo_section">
+              <a th:href="@{/gharnata/}"><img class="img-responsive" src="/assets/images/logo/logo.png" alt="Carrelage Gharnata logo" /></a>
+            </div>
+            <div class="right_topbar">
+              <div class="icon_info">
+                <ul>
+                  <li><a th:href="@{/gharnata/notif-stock}"><i class="fa fa-bell-o"></i><span th:if="${notif !=0}" class="badge" th:text="${notif}"></span></a></li>
+                </ul>
+                <ul class="user_profile_dd">
+                  <li>
+                    <a class="dropdown-toggle" data-toggle="dropdown"><img class="img-responsive rounded-circle" src="/images/profile.png" alt="user image" /><span class="name_user" th:text="${#authentication.name}"></span></a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" th:href="@{/logout}"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <!-- end topbar -->
+      <!-- dashboard inner -->
+      <div class="midde_cont">
+        <div class="container-fluid">
+          <div class="row column_title">
+            <div class="col-md-12">
+              <div class="page_title">
+                <form th:action="@{/gharnata/sim-fac}" method="post" >
+                  <div class="form-group">
+                    <table width="60%">
+                      <tr>
+                        <td><input list="codes" class="form-control" name="ref"  placeholder="Réference" required autofocus></td>
+                        <td ><input type="number" class="form-control" placeholder="Quantité" name="quant" min="1" required></td>
+                        <td><button class="btn cur-p btn-primary" type="submit"><i class="fa fa-plus"></i></button></td>
+                      </tr>
+                    </table>
+                  </div>
+                  <datalist id="codes">
+                    <th:block th:each="prodInfo : ${prodInfos}">
+                      <option th:value="${prodInfo.ref}" th:text="${prodInfo.nom}" ></option>
+                    </th:block>
+                  </datalist>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- row -->
+          <div class="row column1">
+            <div class="col-md-12">
+              <a th:href="@{/gharnata/vider-page}" onclick="return confirm('Voulez vous vraiment vider la page ?');"><button class="btn cur-p btn-danger" style="float: right"><i class="fa fa-times"></i> Vider la page </button></a>
+              <div class="white_shd full margin_bottom_30">
+                <div class="full price_table padding_infor_info">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <h4>Simuler une facture</h4>
+                      <div class="table-responsive-sm">
+                        <div th:if="${error}" class="alert alert-danger" role="alert" id="err">
+                          <p th:text="${error}"></p>
+                        </div>
+                        <div th:if="${success}" class="alert alert-success" role="alert" id="suc">
+                          <p th:text="${success}"></p>
+                        </div>
+                        <table class="table table-striped projects">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th style="width: 2%">Nº</th>
+                                <th style="width: 30%">Reference</th>
+                                <th>Designation</th>
+                                <th>Quantite</th>
+                                <th>Prix unitaire</th>
+                                <th>Prix Totale</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <th:block th:each="item, index1 : ${items}">
+
+                                  <tr>
+                                    <td th:text="${idxs[__${index1.index}__]}"></td>
+                                    <td><a th:href="@{/gharnata/product-details/{id}(id=${item.produit.id})}"><span th:text="${item.produit.ref}"></span></a></td>
+                                    <td th:text="${item.produit.name}"></td>
+                                    <td th:text="${item.quantite}"></td>
+                                    <td th:text="${item.produit.prixVente}"></td>
+                                    <td th:text="${item.montant}"></td>
+                                    <td>
+                                      <a th:href="@{/gharnata/delete-item-pasf/{id}(id=${item.id})}" onclick="return confirm('Voulez vous vraiment supprimer cet ligne ?');">
+                                        <button class="btn cur-p btn-danger" style="text-align: right;"><i class="fa fa-trash"></i></button>
+                                      </a>
+                                    </td>
+                                  </tr>
+                              </th:block>
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="full">
+                    <div class="invoice_inner">
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="full invoice_blog padding_infor_info padding-bottom_0">
+                            <h4 th:text="${'Montant HT : '+panierSF.montantHT + ' DH'}"></h4>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="full invoice_blog padding_infor_info padding-bottom_0">
+                            <h4 th:text="${'TVA (20%) : '+panierSF.getMTVA() + ' DH'}"></h4>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="full invoice_blog padding_infor_info padding-bottom_0">
+                            <h4 th:text="${'Montant TTC : '+panierSF.montantTTC + ' DH'}"></h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" >
+                        <form class="wowload fadeInRight" method="post" th:action="@{/gharnata/gen-sim-fac}">
+                          <table width="100%">
+                            <tr>
+                              <td>
+                                <div class="form-group">
+                                  <input class="form-control" list="clients" name="iceCl" placeholder="Client..." required>
+                                  <datalist id="clients">
+                                    <th:block th:each="cl : ${cls}">
+                                      <option th:value="${cl.ice}" th:text="${cl.ste}" ></option>
+                                    </th:block>
+                                  </datalist>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td><div class="form-group"><input class="form-control" type="text" name="date" placeholder="Date..." required></div></td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-group">
+                                  <select class="form-control" id="modPai" name="modPai" onchange="updateTextField()" required>
+                                    <option value="">Mode de Paiement</option>
+                                    <option value="Virement">Virement</option>
+                                    <option value="Chèque">Chèque</option>
+                                    <option value="Espèces">Espèces</option>
+                                    <option value="Effet">Effet</option>
+                                  </select>
+                                  <input class="form-control" type="text" id="pInfo" name="pInfo" disabled required>
+                                </div>
+                              </td>
+                              <td th:if="${items.size()>0}">
+                                <div class="center"><button class="main_bt read_bt" type="submit"><i class="fa fa-download"></i> Generer La Facture</button></div>
+                              </td>
+                            </tr>
+                          </table>
+                        </form>
+                      </div>
+                      <script>
+                        function updateTextField() {
+                          // Récupérer la balise select
+                          var selectBox = document.getElementById("modPai");
+
+                          // Récupérer la balise input texte
+                          var resultField = document.getElementById("pInfo");
+
+                          // Mettre à jour la valeur de l'input texte avec la valeur sélectionnée de la balise select
+                          var selectedOption = selectBox.options[selectBox.selectedIndex];
+                          resultField.value = selectedOption.value + " - ";
+
+                          // Désactiver l'input texte si aucune option n'est sélectionnée
+                          resultField.disabled = (selectedOption.value === "");
+                        }
+                      </script>
+                      <script>
+                        // Obtenir une référence à la div
+                        var maDiv = document.getElementById("err");
+                        // Afficher la div
+                        maDiv.style.display = "block";
+                        setTimeout(function() {
+                          maDiv.style.display = "none";
+                        }, 4000);
+                      </script>
+                      <script>
+                        var sucDiv = document.getElementById("suc");
+                        sucDiv.style.display = "block";
+                        setTimeout(function() {
+                          sucDiv.style.display = "none";
+                        }, 4000);
+                      </script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end row -->
+          </div>
+          <!-- footer -->
+          <div class="container-fluid">
+            <div class="row">
+              <div class="footer">
+                <p>Copyright © 2023 Carrelage Gharnata.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end dashboard inner -->
+      </div>
+    </div>
+    <!-- The Modal 1-->
+    <div class="modal fade" id="addCat">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Ajouter une nouvelle Catégorie</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <!-- Modal body -->
+          <form method="post" role="form" th:action="@{/gharnata/add-categorie}">
+            <div class="modal-body">
+              <div class="form-group">
+                <input type="text" class="form-control" id="cat" placeholder="Catégorie..." name="cat" required>
+              </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-danger" ><i class="fa fa-plus"></i> Ajouter</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- end model popup -->
+    <!-- The Modal 2-->
+    <div class="modal fade" id="loadProds">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Télécharger Liste des Produits</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <!-- Modal body -->
+          <form method="post" role="form" th:action="@{/gharnata/load-prods}">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="idCat">Catégorie :</label>
+                <select class="form-control" name="idCat" id="idCat"  required>
+                  <option value="0">Tous les catégories</option>
+                  <th:block th:each="cat : ${cats}">
+                    <option th:value="${cat.id}" th:text="${cat.lib}"></option>
+                  </th:block>
+                </select><br>
+                <table width="50%">
+                  <tr>
+                    <td>
+                      <div class="form-group">
+                        <label><input type="checkbox" id="qt" name="qt" checked>  Qte</label>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group">
+                        <label><input type="checkbox" id="pr" name="pr" checked> Prix</label>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-danger" ><i class="fa fa-download"></i> Telecharger</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- end model popup -->
+  </div>
+</div>
+<!-- jQuery -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<!-- wow animation -->
+<script src="/assets/js/animate.js"></script>
+<!-- select country -->
+<script src="/assets/js/bootstrap-select.js"></script>
+<!-- owl carousel -->
+<script src="/assets/js/owl.carousel.js"></script>
+<!-- chart js -->
+<script src="/assets/js/Chart.min.js"></script>
+<script src="/assets/js/Chart.bundle.min.js"></script>
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/analyser.js"></script>
+<!-- nice scrollbar -->
+<script src="/assets/js/perfect-scrollbar.min.js"></script>
+<script>
+  var ps = new PerfectScrollbar('#sidebar');
+</script>
+<!-- custom js -->
+<script src="/assets/js/custom.js"></script>
+<!-- calendar file css -->
+<script src="/assets/js/semantic.min.js"></script>
+</body>
+</html>

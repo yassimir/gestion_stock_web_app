@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Template Responsive avec Sidebar Cachable</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+            rel="stylesheet"
+    />
+
+    <style>
+        :root {
+            --primary-blue: #0d6efd;
+            --primary-blue-dark: #084298;
+            --primary-blue-light: #cfe2ff;
+        }
+
+        body {
+            background-color: var(--primary-blue-light);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar */
+        #sidebar {
+            background-color: var(--primary-blue-dark);
+            color: white;
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 1rem;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 1030; /* au-dessus de la navbar */
+        }
+
+        /* Sidebar cachée (mobile ou bouton toggle) */
+        #sidebar.hide {
+            transform: translateX(-100%);
+        }
+
+        #sidebar h3 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        #sidebar .nav-link,
+        #sidebar .nav-link:hover {
+            color: white;
+        }
+
+        #sidebar .nav-link.active {
+            background-color: var(--primary-blue);
+        }
+
+        /* Sous-menu : même bg que sidebar, texte un peu plus clair */
+        #sidebar .submenu {
+            padding-left: 1.5rem;
+            background-color: var(--primary-blue-dark);
+            color: #b8d1ff;
+        }
+
+        #sidebar .submenu .nav-link {
+            color: #b8d1ff;
+        }
+
+        /* Main content */
+        #main-content {
+            margin-left: 250px;
+            padding: 1.5rem 2rem;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Quand sidebar cachée */
+        #sidebar.hide + #main-content {
+            margin-left: 0;
+        }
+
+        /* Navbar top */
+        .navbar-custom {
+            background-color: var(--primary-blue);
+            color: white;
+            height: 56px;
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            transition: left 0.3s ease;
+            z-index: 1040;
+        }
+
+        /* Navbar en mode sidebar cachée */
+        #sidebar.hide + #main-content + .navbar-custom {
+            left: 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            user-select: none;
+        }
+
+        .navbar-custom .btn,
+        .navbar-custom .nav-link,
+        .navbar-custom .dropdown-toggle {
+            color: white;
+        }
+
+        .navbar-custom .btn:hover,
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .dropdown-toggle:hover {
+            color: var(--primary-blue-light);
+        }
+
+        .user-photo {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+
+        /* Bouton toggle menu */
+        #sidebarToggleBtn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+
+        /* Scrollbar sidebar (Webkit) */
+        #sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #sidebar::-webkit-scrollbar-thumb {
+            background-color: var(--primary-blue);
+            border-radius: 4px;
+        }
+
+        /* Responsive mobile */
+        @media (max-width: 991.98px) {
+            #sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 1050;
+            }
+
+            #sidebar.show {
+                transform: translateX(0);
+            }
+
+            #main-content {
+                margin-left: 0 !important;
+                padding-top: 56px;
+            }
+
+            .navbar-custom {
+                left: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Sidebar -->
+<nav id="sidebar" aria-label="Sidebar navigation">
+    <h3>Mon App</h3>
+    <ul class="nav nav-pills flex-column mb-auto" id="menu">
+        <li>
+            <a href="#" class="nav-link active" aria-current="page">
+                Tableau de bord <i class="bi bi-speedometer2 ms-1"></i>
+            </a>
+        </li>
+        <li>
+            <a
+                    class="nav-link d-flex justify-content-between align-items-center"
+                    data-bs-toggle="collapse"
+                    href="#submenu1"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="submenu1"
+            >Clients <i class="bi bi-chevron-down"></i
+            ></a>
+            <div class="collapse submenu" id="submenu1" data-bs-parent="#menu">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="#" class="nav-link">Liste des clients</a></li>
+                    <li><a href="#" class="nav-link">Ajouter client</a></li>
+                    <li><a href="#" class="nav-link">Statistiques</a></li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <a
+                    class="nav-link d-flex justify-content-between align-items-center"
+                    data-bs-toggle="collapse"
+                    href="#submenu2"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="submenu2"
+            >Commandes <i class="bi bi-chevron-down"></i
+            ></a>
+            <div class="collapse submenu" id="submenu2" data-bs-parent="#menu">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="#" class="nav-link">Toutes les commandes</a></li>
+                    <li><a href="#" class="nav-link">Commandes en attente</a></li>
+                    <li><a href="#" class="nav-link">Commandes livrées</a></li>
+                </ul>
+            </div>
+        </li>
+        <li><a href="#" class="nav-link">Rapports</a></li>
+        <li><a href="#" class="nav-link">Support</a></li>
+    </ul>
+</nav>
+
+<!-- Navbar top -->
+<nav class="navbar navbar-custom">
+    <button id="sidebarToggleBtn" aria-label="Toggle menu">
+        <i class="bi bi-list"></i>
+    </button>
+    <a class="navbar-brand" href="#">MonLogo</a>
+
+    <div class="ms-auto d-flex align-items-center">
+        <!-- Notifications -->
+        <button
+                type="button"
+                class="btn btn-primary position-relative me-3"
+                aria-label="Notifications"
+                id="notifBtn"
+        >
+            <i class="bi bi-bell-fill fs-5"></i>
+            <span
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            >3<span class="visually-hidden">non lues</span></span
+            >
+        </button>
+
+        <!-- User photo -->
+        <img
+                src="https://i.pravatar.cc/40"
+                alt="Photo utilisateur"
+                class="user-photo"
+                id="userPhoto"
+        />
+
+        <!-- Settings dropdown -->
+        <div class="dropdown ms-3">
+            <button
+                    class="btn btn-primary dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+            >
+                Paramètres
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#">Profil</a></li>
+                <li><a class="dropdown-item" href="#">Compte</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item text-danger" href="#">Déconnexion</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main content -->
+<div id="main-content">
+    <div class="container-fluid pt-4">
+        <h3 class="mb-4">Exemples d’éléments UI</h3>
+
+        <div class="row g-4">
+            <!-- Inputs -->
+            <div class="col-md-6 col-lg-4">
+                <label for="inputText" class="form-label">Texte simple</label>
+                <input
+                        type="text"
+                        id="inputText"
+                        class="form-control"
+                        placeholder="Entrer un texte"
+                />
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <label for="inputEmail" class="form-label">Email</label>
+                <input
+                        type="email"
+                        id="inputEmail"
+                        class="form-control"
+                        placeholder="exemple@mail.com"
+                />
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <label for="inputPassword" class="form-label">Mot de passe</label>
+                <input type="password" id="inputPassword" class="form-control" />
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-md-6 col-lg-4 d-flex flex-column gap-2">
+                <button class="btn btn-primary">Bouton principal</button>
+                <button class="btn btn-outline-primary">Bouton secondaire</button>
+                <button class="btn btn-danger">Bouton danger</button>
+            </div>
+
+            <!-- Alerts -->
+            <div class="col-md-6 col-lg-4">
+                <div class="alert alert-primary" role="alert">
+                    C’est une alerte d’information.
+                </div>
+                <div class="alert alert-warning" role="alert">
+                    C’est une alerte d’avertissement.
+                </div>
+                <div class="alert alert-danger" role="alert">
+                    C’est une alerte d’erreur.
+                </div>
+            </div>
+
+            <!-- Cards -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Carte d’exemple</h5>
+                        <p class="card-text">
+                            Ceci est une carte Bootstrap que tu peux utiliser pour présenter
+                            du contenu.
+                        </p>
+                        <a href="#" class="btn btn-primary btn-sm">Voir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS (Popper + Bootstrap) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const sidebar = document.getElementById("sidebar");
+    const toggleBtn = document.getElementById("sidebarToggleBtn");
+
+    toggleBtn.addEventListener("click", () => {
+        // Toggle classes pour desktop et mobile
+        if (window.innerWidth >= 992) {
+            sidebar.classList.toggle("hide");
+        } else {
+            sidebar.classList.toggle("show");
+        }
+    });
+
+    // Cacher sidebar si on clique sur un lien (mobile)
+    document.querySelectorAll("#sidebar .nav-link").forEach((link) => {
+        link.addEventListener("click", () => {
+            if (window.innerWidth < 992) {
+                sidebar.classList.remove("show");
+            }
+        });
+    });
+</script>
+</body>
+</html>

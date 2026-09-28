@@ -1,0 +1,348 @@
+/* ==========================================================================
+   GHARNATA THEME — thème "atelier céramique"
+   Palette : anthracite chaud / terracotta / sable / blanc cassé
+   Ce fichier SURCHARGE le style existant sans toucher au HTML/JS.
+   Toutes les classes utilisées par le JS (collapse, PerfectScrollbar,
+   toggle sidebar, dropdown, etc.) restent intactes : #sidebar,
+   .sidebar_blog_1, .sidebar_blog_2, .topbar, .dropdown-toggle, .active, ...
+   ========================================================================== */
+
+:root {
+  --gh-anthracite: #241F1C;
+  --gh-anthracite-2: #2E2823;
+  --gh-anthracite-3: #382F29;
+  --gh-terracotta: #B5652F;
+  --gh-terracotta-dark: #8F4A22;
+  --gh-sable: #D9A66C;
+  --gh-bg: #F7F4EF;
+  --gh-card-bg: #FFFFFF;
+  --gh-text: #5B5450;
+  --gh-text-strong: #241F1C;
+  --gh-border: #E7E1D8;
+  --gh-shadow: 0 4px 18px rgba(36, 31, 28, 0.08);
+  --gh-radius: 12px;
+  --gh-radius-sm: 8px;
+  --font-title: 'Sora', 'Segoe UI', sans-serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Base                                                                    */
+/* ---------------------------------------------------------------------- */
+
+body {
+  background: var(--gh-bg) !important;
+  color: var(--gh-text) !important;
+  font-family: var(--font-body) !important;
+}
+
+h1, h2, h3, h4, h5, h6,
+.page_title h2,
+.gh-card-header h2 {
+  font-family: var(--font-title) !important;
+  color: var(--gh-text-strong) !important;
+  letter-spacing: -0.01em;
+}
+
+a { color: var(--gh-terracotta); }
+a:hover, a:focus { color: var(--gh-terracotta-dark); text-decoration: none; }
+
+/* ---------------------------------------------------------------------- */
+/* Sidebar                                                                 */
+/* ---------------------------------------------------------------------- */
+
+#sidebar {
+  background: var(--gh-anthracite) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sidebar_blog_1 {
+  background: var(--gh-anthracite) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 18px;
+}
+
+.sidebar_blog_1 .sidebar-header {
+  padding: 22px 20px 10px;
+}
+
+.sidebar_blog_1 .logo_section img {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.sidebar_user_info {
+  padding: 10px 20px 0;
+}
+
+.sidebar_user_info .user_info h6 {
+  color: #F7F4EF !important;
+  font-family: var(--font-title);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.sidebar_user_info .user_info p {
+  color: var(--gh-sable) !important;
+  font-size: 12px;
+}
+
+.sidebar_user_info .online_animation {
+  background: #6FBF73 !important;
+  box-shadow: 0 0 0 3px rgba(111, 191, 115, 0.25);
+}
+
+.sidebar_user_info .user_img img {
+  border: 2px solid var(--gh-terracotta);
+}
+
+.sidebar_blog_2 {
+  background: var(--gh-anthracite) !important;
+  padding-top: 10px;
+}
+
+/* menu items */
+.sidebar_blog_2 .components > li > a,
+.sidebar_blog_2 .components ul.collapse > li > a {
+  color: #D9D2C9 !important;
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  font-weight: 500;
+  padding: 12px 22px;
+  border-left: 3px solid transparent;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.sidebar_blog_2 .components ul.collapse > li > a {
+  padding-left: 46px;
+  font-size: 13.5px;
+  color: #BFB6AB !important;
+}
+
+.sidebar_blog_2 .components > li > a i,
+.sidebar_blog_2 .components ul.collapse > li > a i {
+  width: 20px;
+  text-align: center;
+  margin-right: 6px;
+  transition: color 0.15s ease;
+}
+
+/* unify every icon accent color to the theme's terracotta/sable, keeping
+   the original classes so nothing in the markup needs to change */
+.sidebar_blog_2 i.yellow_color,
+.sidebar_blog_2 i.blue1_color,
+.sidebar_blog_2 i.purple_color2,
+.sidebar_blog_2 i.red_color,
+.sidebar_blog_2 i.green_color,
+.sidebar_blog_2 i.orange_color {
+  color: var(--gh-sable) !important;
+}
+
+.sidebar_blog_2 .components > li > a:hover,
+.sidebar_blog_2 .components ul.collapse > li > a:hover {
+  background: rgba(181, 101, 47, 0.16) !important;
+  color: #FFFFFF !important;
+  border-left-color: var(--gh-terracotta);
+}
+
+.sidebar_blog_2 .components > li > a:hover i,
+.sidebar_blog_2 .components ul.collapse > li > a:hover i {
+  color: var(--gh-terracotta) !important;
+}
+
+.sidebar_blog_2 li.active > a,
+.sidebar_blog_2 .components > li.active > a {
+  background: rgba(181, 101, 47, 0.22) !important;
+  color: #FFFFFF !important;
+  border-left-color: var(--gh-terracotta);
+}
+
+.sidebar_blog_2 li.active > a i {
+  color: var(--gh-terracotta) !important;
+}
+
+.sidebar_blog_2 a.dropdown-toggle:after {
+  color: #8A8079;
+}
+
+/* scrollbar (perfect-scrollbar) */
+#sidebar .ps__rail-y > .ps__thumb-y { background: var(--gh-terracotta) !important; }
+#sidebar .ps__rail-y { background: transparent !important; }
+
+/* ---------------------------------------------------------------------- */
+/* Topbar                                                                  */
+/* ---------------------------------------------------------------------- */
+
+.topbar {
+  background: var(--gh-card-bg) !important;
+  border-bottom: 1px solid var(--gh-border);
+  box-shadow: 0 2px 10px rgba(36, 31, 28, 0.04);
+}
+
+.topbar .sidebar_toggle {
+  color: var(--gh-terracotta) !important;
+  background: rgba(181, 101, 47, 0.1);
+  border-radius: var(--gh-radius-sm);
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  transition: background 0.15s ease;
+}
+
+.topbar .sidebar_toggle:hover {
+  background: rgba(181, 101, 47, 0.2);
+}
+
+.topbar .icon_info > ul > li > a {
+  color: var(--gh-text) !important;
+}
+
+.topbar .icon_info > ul > li > a:hover {
+  color: var(--gh-terracotta) !important;
+}
+
+.topbar .badge {
+  background: var(--gh-terracotta) !important;
+  color: #fff !important;
+}
+
+.topbar .user_profile_dd .name_user {
+  color: var(--gh-text-strong) !important;
+  font-weight: 600;
+  font-family: var(--font-body);
+}
+
+.topbar .user_profile_dd img {
+  border: 2px solid var(--gh-sable);
+}
+
+.topbar .dropdown-menu {
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-sm);
+  box-shadow: var(--gh-shadow);
+}
+
+.topbar .dropdown-item:hover {
+  background: rgba(181, 101, 47, 0.08);
+  color: var(--gh-terracotta-dark);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Content area / cards                                                    */
+/* ---------------------------------------------------------------------- */
+
+#content, .midde_cont { background: var(--gh-bg) !important; }
+
+.page_title h2 {
+  font-size: 22px;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.page_title h2:after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 46px; height: 3px;
+  background: var(--gh-terracotta);
+  border-radius: 3px;
+}
+
+.white_shd {
+  background: var(--gh-card-bg) !important;
+  border-radius: var(--gh-radius) !important;
+  box-shadow: var(--gh-shadow) !important;
+  border: 1px solid var(--gh-border);
+}
+
+.footer {
+  color: #A69E96;
+  font-size: 13px;
+  text-align: center;
+  padding: 18px 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Forms & buttons (cohérent avec "Ajouter Produit")                       */
+/* ---------------------------------------------------------------------- */
+
+.form-control {
+  font-family: var(--font-body);
+  border-radius: var(--gh-radius-sm) !important;
+  border: 1px solid var(--gh-border) !important;
+  color: var(--gh-text-strong);
+}
+
+.form-control:focus {
+  border-color: var(--gh-terracotta) !important;
+  box-shadow: 0 0 0 3px rgba(181, 101, 47, 0.14) !important;
+}
+
+label { color: var(--gh-text-strong); }
+
+.btn-danger,
+.btn-primary {
+  background: var(--gh-terracotta) !important;
+  border-color: var(--gh-terracotta) !important;
+  border-radius: var(--gh-radius-sm) !important;
+  font-weight: 600;
+}
+
+.btn-danger:hover,
+.btn-primary:hover {
+  background: var(--gh-terracotta-dark) !important;
+  border-color: var(--gh-terracotta-dark) !important;
+}
+
+.modal-content {
+  border-radius: var(--gh-radius) !important;
+  border: none;
+  box-shadow: var(--gh-shadow);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--gh-border);
+}
+
+.modal-title {
+  font-family: var(--font-title);
+  color: var(--gh-text-strong);
+}
+
+/* ---------------------------------------------------------------------- */
+/* "Ajouter Produit" card — alignée sur la nouvelle palette                */
+/* ---------------------------------------------------------------------- */
+
+.gh-card {
+  border-radius: var(--gh-radius) !important;
+  box-shadow: none !important;
+}
+
+.gh-card-header {
+  background: linear-gradient(135deg, var(--gh-terracotta) 0%, var(--gh-terracotta-dark) 100%) !important;
+  font-family: var(--font-title);
+}
+
+.gh-card-body { background: var(--gh-card-bg) !important; }
+
+.gh-grid label { color: var(--gh-text-strong) !important; }
+
+.gh-file-drop {
+  border-color: var(--gh-border) !important;
+  background: var(--gh-bg) !important;
+}
+
+.gh-file-drop:hover { border-color: var(--gh-sable) !important; }
+
+.gh-actions .btn {
+  background: var(--gh-terracotta) !important;
+  border-color: var(--gh-terracotta) !important;
+}
+
+.gh-actions .btn:hover {
+  background: var(--gh-terracotta-dark) !important;
+  border-color: var(--gh-terracotta-dark) !important;
+}

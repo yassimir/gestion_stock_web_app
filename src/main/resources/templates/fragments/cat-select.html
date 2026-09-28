@@ -1,0 +1,10 @@
+
+<div class="field" id="cat-select-container" th:fragment="catSelect">
+    <label for="idCat">Catégorie <span class="star">*</span></label>
+    <select class="control" name="idCat" id="idCat" required>
+        <option value="">Sélectionner une catégorie</option>
+        <th:block th:each="cat : ${cats}">
+            <option th:value="${cat.id}" th:text="${cat.lib}"></option>
+        </th:block>
+    </select>
+</div>

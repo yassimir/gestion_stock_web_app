@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>Gharnata | Panier</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- site icon -->
+    <link rel="icon" href="/assets/images/logo/logo_icon.png" type="image/png" />
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <!-- site css -->
+    <link rel="stylesheet" href="/assets/style.css" />
+    <!-- responsive css -->
+    <link rel="stylesheet" href="/assets/css/responsive.css" />
+    <!-- color css -->
+    <link rel="stylesheet" href="/assets/css/colors.css" />
+    <!-- select bootstrap -->
+    <link rel="stylesheet" href="/assets/css/bootstrap-select.css" />
+    <!-- scrollbar css -->
+    <link rel="stylesheet" href="/assets/css/perfect-scrollbar.css" />
+    <!-- custom css -->
+    <link rel="stylesheet" href="/assets/css/custom.css" />
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="dashboard dashboard_1">
+<div class="full_container">
+    <div class="inner_container">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar_blog_1">
+                <div class="sidebar-header">
+                    <div class="logo_section">
+                        <a th:href="@{/gharnata/}"><img class="logo_icon img-responsive" src="/assets/images/logo/logo_icon.png" alt="Carrelage Gharnata logo" /></a>
+                    </div>
+                </div>
+                <div class="sidebar_user_info">
+                    <div class="icon_setting"></div>
+                    <div class="user_profle_side">
+                        <div class="user_img"><img class="img-responsive" src="/images/profile.png" alt="user image" /></div>
+                        <div class="user_info">
+                            <h6 th:text="${#authentication.name}"></h6>
+                            <p><span class="online_animation"></span> Online</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar_blog_2">
+                <ul class="list-unstyled components">
+                    <li class="active">
+                        <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-cubes yellow_color"></i> <span>Produits</span></a>
+                        <ul class="collapse list-unstyled" id="dashboard">
+                            <li>
+                                <a th:href="@{/gharnata/show-products}"><i class="fa fa-cube yellow_color"></i> <span>Afficher les produits</span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{/gharnata/add-product}"><i class="fa fa-plus yellow_color"></i> <span>Ajouter un Produit</span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{/gharnata/modify-product}"><i class="fa fa-edit yellow_color"></i> <span>Modifier un Produit</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a th:href="@{/gharnata/show-panier}"><i class="fa fa-shopping-cart green_color"></i> <span>Panier</span></a></li>
+                    <li><a th:href="@{/gharnata/show-commands}"><i class="fa fa-archive blue1_color"></i> <span>Commandes</span></a></li>
+                    <li><a th:href="@{/gharnata/list-clients}"><i class="fa fa-group purple_color2"></i> <span>Clients</span></a></li>
+                    <li><a th:href="@{/gharnata/pass-mass}"><i class="fa fa-bolt red_color"></i> <span>Produits en Masse</span></a></li>
+                    <li><a th:href="@{/gharnata/sim-fac}"><i class="fa fa-pencil green_color"></i> <span>Simuler  une facture</span></a></li>
+                    <li>
+                        <a href="#operations" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-diamond orange_color"></i> <span>Opérations</span></a>
+                        <ul class="collapse list-unstyled" id="operations">
+                            <li><a href="#" data-toggle="modal" data-target="#addCat"><i class="fa fa-plus orange_color"></i> <span>Ajouter une Catégorie</span></a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#loadProds"><i class="fa fa-download orange_color"></i> <span>Télécharger les Produits</span></a></li>
+                            <li><a th:href="@{/gharnata/show-products-stock}"><i class="fa fa-cubes orange_color"></i> <span>Liste des Produits</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- end sidebar -->
+        <!-- right content -->
+        <div id="content">
+            <!-- topbar -->
+            <div class="topbar">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <div class="full">
+                        <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
+                        <div class="logo_section">
+                            <a th:href="@{/gharnata/}"><img class="img-responsive" src="/assets/images/logo/logo.png" alt="Carrelage Gharnata logo" /></a>
+                        </div>
+                        <div class="right_topbar">
+                            <div class="icon_info">
+                                <ul>
+                                    <li><a th:href="@{/gharnata/notif-stock}"><i class="fa fa-bell-o"></i><span th:if="${notif !=0}" class="badge" th:text="${notif}"></span></a></li>
+                                </ul>
+                                <ul class="user_profile_dd">
+                                    <li>
+                                        <a class="dropdown-toggle" data-toggle="dropdown"><img class="img-responsive rounded-circle" src="/images/profile.png" alt="user image" /><span class="name_user" th:text="${#authentication.name}"></span></a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" th:href="@{/logout}"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <!-- end topbar -->
+            <!-- dashboard inner -->
+
+            <center>
+            <div class="midde_cont">
+                <div class="container-fluid">
+                    <a th:href="@{/gharnata/vider-panier/2}" onclick="return confirm('Voulez vous vraiment vider la panier ?');"><button class="btn cur-p btn-danger" style="float: right"><i class="fa fa-trash"></i> Vider le panier </button></a>
+                    <div class="dash_blog">
+                        <div class="dash_blog_inner">
+                            <div class="dash_head">
+                                <h3><span><i class="fa fa-shopping-cart"></i> Panier</span><span class="plus_green_bt"><a th:href="@{/gharnata/show-products}">+</a></span></h3>
+                            </div>
+                            <div class="task_list_main">
+                                <ul class="task_list">
+                                    <th:block th:each="item : ${items}">
+                                        <li><strong th:text="${item.produit.name}"></strong> <span th:text="${' ( quantité : '+ item.quantite+' piece(s) )' }"></span>&nbsp;&nbsp;<a th:href="@{/gharnata/delete-item-panier/{id}(id=${item.id})}" onclick="return confirm('Voulez vous vraiment supprimer cet ligne ?');"><button class="btn cur-p btn-danger" style="text-align: right;"><i class="fa fa-trash"></i></button></a></li>
+                                    </th:block>
+                                </ul>
+                            </div>
+                            <div class="read_more">
+                                <div class="center"><a class="main_bt read_bt" th:href="@{/gharnata/list-clients}">Passer la commande</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- footer -->
+                <div class="container-fluid">
+                    <div class="footer">
+                        <p>Copyright © 2023 Carrelage Gharnata.</p>
+                    </div>
+                </div>
+            </div>
+            </center>
+            <!-- end dashboard inner -->
+        </div>
+        <!-- The Modal 1-->
+        <div class="modal fade" id="addCat">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Ajouter une nouvelle Catégorie</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <form method="post" role="form" th:action="@{/gharnata/add-categorie}">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="cat" placeholder="Catégorie..." name="cat" required>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" ><i class="fa fa-plus"></i> Ajouter</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end model popup -->
+        <!-- The Modal 2-->
+        <div class="modal fade" id="loadProds">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Télécharger Liste des Produits</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <form method="post" role="form" th:action="@{/gharnata/load-prods}">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="idCat">Catégorie :</label>
+                                <select class="form-control" name="idCat" id="idCat"  required>
+                                    <option value="0">Tous les catégories</option>
+                                    <th:block th:each="cat : ${cats}">
+                                        <option th:value="${cat.id}" th:text="${cat.lib}"></option>
+                                    </th:block>
+                                </select><br>
+                                <table width="50%">
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label><input type="checkbox" id="qt" name="qt" checked>  Qte</label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label><input type="checkbox" id="pr" name="pr" checked> Prix</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" ><i class="fa fa-download"></i> Telecharger</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end model popup -->
+    </div>
+</div>
+<!-- jQuery -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<!-- wow animation -->
+<script src="/assets/js/animate.js"></script>
+<!-- select country -->
+<script src="/assets/js/bootstrap-select.js"></script>
+<!-- owl carousel -->
+<script src="/assets/js/owl.carousel.js"></script>
+<!-- chart js -->
+<script src="/assets/js/Chart.min.js"></script>
+<script src="/assets/js/Chart.bundle.min.js"></script>
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/analyser.js"></script>
+<!-- nice scrollbar -->
+<script src="js/perfect-scrollbar.min.js"></script>
+<script>
+    var ps = new PerfectScrollbar('#sidebar');
+</script>
+<!-- custom js -->
+<script src="/assets/js/chart_custom_style1.js"></script>
+<script src="/assets/js/custom.js"></script>
+</body>
+</html>
