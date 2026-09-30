@@ -786,8 +786,6 @@
 
     <link rel="apple-touch-icon"
           th:href="@{/icons/icon-192.png}">
-    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.12/htmx.min.js"></script>
 </head>
 <body>
 <div class="app-shell">
@@ -845,8 +843,14 @@
                     <img src="/images/profile.png" alt="Photo de profil">
                     <div><span class="profile-name" th:text="${#authentication.name}">Administrateur</span><span
                             class="profile-role">Administrateur</span></div>
-                    <a th:href="@{/logout}" class="text-muted ml-2" aria-label="Se déconnecter"><i
-                            class="fa fa-sign-out"></i></a>
+                    <form th:action="@{/logout}" method="post" style="display:inline;">
+                        <button type="submit"
+                                class="text-muted ml-2"
+                                aria-label="Se déconnecter"
+                                style="border:none; background:none; padding:0; cursor:pointer;">
+                            <i class="fa fa-sign-out"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </header>
@@ -879,10 +883,6 @@
                                     <i class="fa fa-tag"></i>
                                 </div>
                             </div>
-                            <!--<div class="field">
-                                <label for="ref">Référence <span class="star">*</span></label>
-                                <input type="text" class="control" id="ref" placeholder="Ex. CAR-MAR-001" name="ref" required>
-                            </div>-->
                             <div class="field">
                                 <label for="ref">Référence <span class="star">*</span></label>
                                 <input type="text" class="control" id="ref" placeholder="Ex. PROD-MAR-001" name="ref"
@@ -891,14 +891,6 @@
                                        hx-target="#ref-feedback"
                                        hx-swap="innerHTML"
                                        required>
-                                <!--<input type="text" class="control" id="ref" placeholder="Ex. CAR-MAR-001" name="ref"
-                                       hx-get="/gharnata/products/check-ref"
-                                       hx-trigger="keyup changed delay:500ms"
-                                       hx-target="#ref-feedback"
-                                       hx-swap="innerHTML"
-                                       hx-on::before-request="console.log('REQUETE ENVOYEE avec ref=', event.target.value)"
-                                       hx-on::after-request="console.log('REPONSE REÇUE, contenu:', event.detail.xhr.responseText)"
-                                       required>-->
                                 <div id="ref-feedback">
                                     <input type="hidden" id="refExiste" value="false">
                                 </div>
@@ -910,15 +902,7 @@
                                                                                          placeholder="Ex. Blanc mat"
                                                                                          name="color"
                                                                                          th:value="${ancP.color}"></div>
-                            <!--<div class="field">
-                                <label for="idCat">Catégorie <span class="star">*</span></label>
-                                <select class="control" name="idCat" id="idCat" required>
-                                    <option value="">Sélectionner une catégorie</option>
-                                    <th:block th:each="cat : ${cats}">
-                                        <option th:value="${cat.id}" th:text="${cat.lib}"></option>
-                                    </th:block>
-                                </select>
-                            </div>-->
+
                             <div th:replace="~{fragments/cat-select :: catSelect}"></div>
 
                             <div class="field"><label for="pv">Prix de vente <span class="star">*</span></label>
@@ -1038,6 +1022,8 @@
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/popper.min.js"></script>
 <script src="/assets/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.12/htmx.min.js"></script>
 <script>
     function validateRef() {
         const existe = document.getElementById("refExiste");
@@ -1096,6 +1082,6 @@
         });
     }
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.12/htmx.min.js"></script>
+
 </body>
 </html>

@@ -15,7 +15,7 @@ import org.hibernate.annotations.Check;
 public class Produit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Column(name = "nom", nullable = false)
     private String name;
     /*@Column(name = "prix_achat", nullable = false)
@@ -37,7 +37,7 @@ public class Produit {
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Categorie categorie;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

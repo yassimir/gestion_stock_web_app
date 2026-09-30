@@ -18,9 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/gharnata")
@@ -40,7 +38,7 @@ public class ProduitController {
         model.addAttribute("notif",servNotification.nbNotif());
         return "gest/addProduct";
     }
-    @GetMapping("/products/check-ref")
+    /*@GetMapping("/products/check-ref")
     public String checkRef(@RequestParam String ref, Model model) {
         Produit produit = servProduit.getProductByRef(ref);
         boolean existe = produit != null;
@@ -50,7 +48,28 @@ public class ProduitController {
         }
 
         return "fragments/ref-feedback :: feedback";
+    }*/
+    /*@GetMapping("/products/check-ref")
+    public String checkRef(@RequestParam String ref, @RequestParam(required = false) Long excludeId, Model model) {
+
+        Produit p = servProduit.getProductByRef(ref);
+        boolean existe = (p != null) && (!p.getId().equals(excludeId));
+        model.addAttribute("existe", existe);
+        if ( p != null){
+            model.addAttribute("produit", p.getName());
+        }
+        return "fragments/ref-feedback :: feedback";
+    }*/
+    @GetMapping("/products/check-ref")
+    public String checkRef(@RequestParam String ref, @RequestParam(required = false) Long excludeId, Model model) {
+        Produit p = servProduit.getProductByRef(ref);
+        boolean existe = (p != null) && (excludeId == null || !p.getId().equals(excludeId));
+        model.addAttribute("existe", existe);
+        model.addAttribute("refVide", ref == null || ref.isBlank());
+        model.addAttribute("produit", existe ? p.getName() : null);
+        return "fragments/ref-feedback :: feedback";
     }
+    //for modification page
     @PostMapping("/add-product")
     public String addproduit(@ModelAttribute Produit produit,int idCat, Model model, RedirectAttributes attributes, MultipartFile imagee) throws Exception {
         produit.setCategorie(this.servProduit.getCatById(idCat));
@@ -136,15 +155,93 @@ public class ProduitController {
         model.addAttribute("cats", this.servProduit.getAllCats());
         return "gest/productDetails";
     }
-    @GetMapping("/modify-product")
+    /*@GetMapping("/modify-product")
     public String modifyProd(Model model){
         model.addAttribute("prods",this.servProduit.getProductDTOs());
         model.addAttribute("product",new Produit());
         model.addAttribute("notif",servNotification.nbNotif());
         model.addAttribute("cats", this.servProduit.getAllCats());
         return "gest/modifyProduct";
+    }*/
+    @GetMapping("/modify-product")
+    public String rechercherProduit(@RequestParam(required = false) String ref, Model model) {
+        model.addAttribute("notif", servNotification.nbNotif());
+        model.addAttribute("cats", this.servProduit.getAllCats());
+        model.addAttribute("prods", this.servProduit.getProductDTOs());
+        if (ref != null && !ref.isBlank()) {
+            Produit produit = this.servProduit.getProductByRef(ref);
+            if (produit == null) {
+                model.addAttribute("error", "Ce produit avec cette référence n'existe pas!");
+            } else {
+                model.addAttribute("product", produit);
+            }
+        }else {
+            model.addAttribute("product", new Produit());
+        }
+        return "gest/modifyProduct";
     }
-    @PostMapping("/modify-product")
+
+    @PostMapping("/modify-product/{id}")
+    public String modifierProduit(@PathVariable long id,
+                                  @RequestParam String ref,
+                                  @RequestParam int idCat,
+                                  @RequestParam String name,
+                                  @RequestParam double prixVente,
+                                  @RequestParam(defaultValue = "0") int quantite,
+                                  @RequestParam MultipartFile imagee,
+                                  RedirectAttributes attributes) {
+
+        if (prixVente < 0 || quantite < 0) {
+            attributes.addFlashAttribute("error", "Le prix et la quantité ne peuvent pas être négatifs.");
+            return "redirect:/gharnata/modify-product?ref=" + ref;
+        }
+
+        Produit p = this.servProduit.getProductById(id);
+        if (p == null) {
+            attributes.addFlashAttribute("error", "Produit introuvable.");
+            return "redirect:/gharnata/modify-product";
+        }
+
+        Categorie cat = this.servProduit.getCatById(idCat);
+        if (cat == null) {
+            attributes.addFlashAttribute("error", "Catégorie invalide.");
+            return "redirect:/gharnata/modify-product?ref=" + p.getRef();
+        }
+
+        p.setQuantite(p.getQuantite() + quantite);
+        p.setName(name);
+        p.setRef(ref);
+        p.setPrixVente(prixVente);
+        p.setCategorie(cat);
+        Produit pt = this.servProduit.addProduit(p);
+
+        if (pt == null) {
+            attributes.addFlashAttribute("error", "Un problème est survenu lors de la modification.");
+            return "redirect:/gharnata/modify-product";
+        }
+
+        if (!imagee.isEmpty()) {
+            if (pt.getPic() != null) {
+                this.servImage.modifyPic(imagee, pt.getPic().getId());
+            } else {
+                try {
+                    pt.setPic(this.servImage.treatPic(imagee));
+                } catch (Exception e) {
+                    attributes.addFlashAttribute("error", "Un problème est survenu lors de la modification de l'image.");
+                    return "redirect:/gharnata/modify-product";
+                }
+                this.servProduit.addProduit(pt);
+            }
+        }
+
+        attributes.addFlashAttribute("success", "Produit bien modifié");
+        if (pt.getQuantite() > 5) {
+            this.servNotification.deletEnr(pt);
+        }
+        return "redirect:/gharnata/modify-product";
+    }
+    //working function
+    /*@PostMapping("/modify-product")
     public String modifyProd(@RequestParam("ref") String ref, int idCat, Model model, RedirectAttributes attributes, long id, String name, double prixVente, int quantite, MultipartFile imagee) throws Exception {
         System.out.println("here1");
         if (id != 0){
@@ -204,7 +301,7 @@ public class ProduitController {
         model.addAttribute("cats", this.servProduit.getAllCats());
         System.out.println("here18");
         return "gest/modifyProduct";
-    }
+    }*/
     /*@PostMapping("/modify-product")
     public String modifyProd(@RequestParam("ref") String ref, int idCat, Model model, RedirectAttributes attributes, long id, String name, double prixVente, int quantite, MultipartFile imagee ){
         if (id != 0){

@@ -5,6 +5,7 @@
 </span>-->
 
 
+<!--
 <span th:fragment="feedback">
     <input type="hidden"
            id="refExiste"
@@ -22,4 +23,19 @@
         Référence disponible
     </span>
 
+</span>-->
+<span th:fragment="feedback">
+    <input type="hidden" id="refExiste" th:value="${existe}">
+
+    <span th:if="${existe}"
+          style="color:#e45f68; font-size:11px; display:block; margin-top:6px;">
+        <i class="fa fa-exclamation-circle"></i>
+        Cette référence existe déjà pour le produit :
+        <th:block th:text="${produit}"></th:block>
+    </span>
+
+    <span th:if="${!existe and !refVide}"
+          style="color:green; font-size:11px; display:block; margin-top:6px;">
+        <i class="fa fa-check-circle"></i> Référence disponible
+    </span>
 </span>
