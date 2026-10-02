@@ -1,7 +1,6 @@
 package com.gharnata.service;
 
 import com.gharnata.entity.*;
-import com.gharnata.entity.dto.ProdInfo;
 import com.gharnata.entity.dto.ProductDTO;
 import com.gharnata.repository.RepCategory;
 import com.gharnata.repository.RepCommande;
@@ -10,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ServProduit {
@@ -29,6 +26,18 @@ public class ServProduit {
     private RepCommande repCommande;
     @Autowired
     private ServClient servClient;
+
+    public List<ProductDTO> searchProducts(String query) {
+
+        return repProduit.searchProducts(query)
+                .stream()
+                .map(product -> new ProductDTO(
+                        product.getId(),
+                        product.getName(),
+                        product.getRef()
+                ))
+                .toList();
+    }
 
     public Produit addProduit(Produit produit){
         return this.repProduit.save(produit);
@@ -58,9 +67,6 @@ public class ServProduit {
         this.repProduit.deleteById(id);
     }
 
-    public List<ProdInfo> getReferences() {
-        return this.repProduit.findRef();
-    }
     public Categorie getCatById(int id){
         return this.repCategory.findById(id).orElse(null);
     }

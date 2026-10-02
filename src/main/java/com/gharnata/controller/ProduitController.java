@@ -3,7 +3,7 @@ package com.gharnata.controller;
 import com.gharnata.entity.Categorie;
 import com.gharnata.entity.PanierItems;
 import com.gharnata.entity.Produit;
-import com.gharnata.entity.dto.ProdInfo;
+import com.gharnata.entity.dto.ProductDTO;
 import com.gharnata.service.ServImage;
 import com.gharnata.service.ServNotification;
 import com.gharnata.service.ServPanier;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -155,15 +154,34 @@ public class ProduitController {
         model.addAttribute("cats", this.servProduit.getAllCats());
         return "gest/productDetails";
     }
-    /*@GetMapping("/modify-product")
-    public String modifyProd(Model model){
-        model.addAttribute("prods",this.servProduit.getProductDTOs());
-        model.addAttribute("product",new Produit());
-        model.addAttribute("notif",servNotification.nbNotif());
-        model.addAttribute("cats", this.servProduit.getAllCats());
-        return "gest/modifyProduct";
-    }*/
+    @GetMapping("/api/products/search")
+    @ResponseBody
+    public List<ProductDTO> searchProducts(
+            @RequestParam("q") String query) {
+
+        return servProduit.searchProducts(query);
+    }
     @GetMapping("/modify-product")
+    public String rechercherProduit(@RequestParam(required = false) Long productId, Model model) {
+        model.addAttribute("notif", servNotification.nbNotif());
+        model.addAttribute("cats", this.servProduit.getAllCats());
+        // Tu n'en as plus besoin pour le datalist
+        // mais tu peux le garder si cette liste est utilisée ailleurs
+        model.addAttribute("prods", this.servProduit.getProductDTOs());
+        if (productId != null) {
+            Produit produit = this.servProduit.getProductById(productId);
+            if (produit == null) {
+                model.addAttribute("error", "Ce produit n'existe pas.");
+                model.addAttribute("product", new Produit());
+            } else {
+                model.addAttribute("product", produit);
+            }
+        } else {
+            model.addAttribute("product", new Produit());
+        }
+        return "gest/modifyProduct";
+    }
+    /*@GetMapping("/modify-product")
     public String rechercherProduit(@RequestParam(required = false) String ref, Model model) {
         model.addAttribute("notif", servNotification.nbNotif());
         model.addAttribute("cats", this.servProduit.getAllCats());
@@ -179,7 +197,7 @@ public class ProduitController {
             model.addAttribute("product", new Produit());
         }
         return "gest/modifyProduct";
-    }
+    }*/
 
     @PostMapping("/modify-product/{id}")
     public String modifierProduit(@PathVariable long id,
@@ -359,7 +377,7 @@ public class ProduitController {
         // Récupérez l'ID de l'utilisateur
         String userId = authentication.getName();
         List<PanierItems> panierItems = this.servPanier.getPanierItemsByAdm(userId);
-        List<ProdInfo> lPI = this.servProduit.getReferences();
+        List<ProductDTO> lPI = this.servProduit.getProductDTOs();
         List<Integer> indexs =new ArrayList<>();
         for (int i=1; i<=panierItems.size();i++){
             indexs.add(i);

@@ -28,13 +28,13 @@ public class GlobalErrorController implements ErrorController {
         Object message = request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
         Throwable exception = (Throwable) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
 
+        int code = (status != null) ? (int) status : response.getStatus(); // fallback fiable
+
         if (exception != null) {
             logger.error("Erreur {} sur {} : ", status, request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI), exception);
         } else {
             logger.error("Erreur {} sur {} — message : {}", status, request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI), message);
         }
-
-        int code = (status != null) ? (int) status : response.getStatus(); // fallback fiable
 
         model.addAttribute("code", code);
         model.addAttribute("message", message != null ? message : "Une erreur est survenue.");

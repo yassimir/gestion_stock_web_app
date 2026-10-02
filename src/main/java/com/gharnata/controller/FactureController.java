@@ -1,7 +1,7 @@
 package com.gharnata.controller;
 
 import com.gharnata.entity.*;
-import com.gharnata.entity.dto.ProdInfo;
+import com.gharnata.entity.dto.ProductDTO;
 import com.gharnata.repository.RepanierItemsSF;
 import com.gharnata.service.*;
 import jakarta.servlet.http.HttpServletResponse;
@@ -67,7 +67,7 @@ public class FactureController {
         // Récupérez l'ID de l'utilisateur
         String userId = authentication.getName();
         List<PanierItemsSF> panierItems = this.servSimFac.getPanierItemsByAdm(userId);
-        List<ProdInfo> lPI = this.servProduit.getReferences();
+        List<ProductDTO> lPI = this.servProduit.getProductDTOs();
         List<Integer> indexs =new ArrayList<>();
         for (int i=1; i<=panierItems.size();i++){
             indexs.add(i);

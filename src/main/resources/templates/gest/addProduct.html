@@ -872,7 +872,8 @@
 
             <div class="workspace">
                 <div class="card form-card">
-                    <div class="card-head"><h2>Informations du produit</h2><span class="required-note"><b>*</b> Champs obligatoires</span>
+                    <div class="card-head">
+                        <h2>Informations du produit</h2><span class="required-note"><b>*</b> Champs obligatoires</span>
                     </div>
                     <form method="post" role="form" th:action="@{/gharnata/add-product}" enctype="multipart/form-data" onsubmit="return validateRef();">
                         <div class="fields">
@@ -886,6 +887,7 @@
                             <div class="field">
                                 <label for="ref">Référence <span class="star">*</span></label>
                                 <input type="text" class="control" id="ref" placeholder="Ex. PROD-MAR-001" name="ref"
+                                       oninput="this.value = this.value.replace(/\s/g, '')"
                                        hx-get="/gharnata/products/check-ref"
                                        hx-trigger="blur, keyup changed delay:500ms"
                                        hx-target="#ref-feedback"
@@ -916,12 +918,17 @@
                                                                     placeholder="Ex. 100" name="quantite" min="1"
                                                                     required><i class="fa fa-cubes"></i></div>
                             </div>
-                            <div class="field full"><label for="imagee">Image du produit <span class="field-hint">(facultatif)</span></label>
+                            <div class="field full">
+                                <label for="imagee">Image du produit <span class="field-hint">(facultatif)</span></label>
                                 <div class="upload-box">
-                                    <div class="upload-icon"><i class="fa fa-cloud-upload"></i></div>
-                                    <div class="upload-copy"><strong id="file-label">Cliquez pour importer une
-                                        image</strong><span>PNG, JPG ou JPEG · 5 Mo maximum</span></div>
-                                    <input type="file" id="imagee" name="imagee" accept="image/png,image/jpeg"></div>
+                                    <div class="upload-icon">
+                                        <i class="fa fa-cloud-upload"></i>
+                                    </div>
+                                    <div class="upload-copy">
+                                        <strong id="file-label">Cliquez pour importer une image</strong><span>PNG, JPG ou JPEG · 5 Mo maximum</span>
+                                    </div>
+                                    <input type="file" id="imagee" name="imagee" accept="image/png,image/jpeg">
+                                </div>
                             </div>
                         </div>
                         <div class="form-footer"><a th:href="@{/gharnata/show-products}"
@@ -936,12 +943,12 @@
                     <div class="card side-card"><h3>Conseils de saisie</h3>
                         <div class="tip">
                             <div class="tip-icon"><i class="fa fa-lightbulb-o"></i></div>
-                            <p><strong>Référence unique</strong>Utilisez une référence claire pour retrouver rapidement
-                                le produit.</p></div>
+                            <p><strong>Référence unique</strong>
+                                Utilisez une référence claire pour retrouver rapidement le produit.</p>
+                        </div>
                         <div class="tip">
                             <div class="tip-icon"><i class="fa fa-check"></i></div>
-                            <p><strong>Prix de vente</strong>Saisissez le prix en dinars, sans ajouter le symbole
-                                monétaire.</p></div>
+                            <p><strong>Prix de vente</strong>Saisissez le prix en dinars, sans ajouter le symbole monétaire.</p></div>
                         <div class="tip">
                             <div class="tip-icon"><i class="fa fa-cubes"></i></div>
                             <p><strong>Stock initial</strong>La quantité sera immédiatement ajoutée à votre inventaire.
@@ -998,15 +1005,13 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <form method="post" role="form" th:action="@{/gharnata/load-prods}">
-                <div class="modal-body"><label for="downloadCategory">Catégorie</label><select class="control"
-                                                                                               name="idCat"
-                                                                                               id="downloadCategory"
-                                                                                               required>
-                    <option value="0">Toutes les catégories</option>
-                    <th:block th:each="cat : ${cats}">
-                        <option th:value="${cat.id}" th:text="${cat.lib}"></option>
-                    </th:block>
-                </select>
+                <div class="modal-body"><label for="downloadCategory">Catégorie</label>
+                    <select class="control" name="idCat" id="downloadCategory" required>
+                        <option value="0">Toutes les catégories</option>
+                        <th:block th:each="cat : ${cats}">
+                            <option th:value="${cat.id}" th:text="${cat.lib}"></option>
+                        </th:block>
+                    </select>
                     <div class="check-row"><label><input type="checkbox" id="qt" name="qt" checked>
                         Quantité</label><label><input type="checkbox" id="pr" name="pr" checked> Prix</label></div>
                 </div>
@@ -1022,7 +1027,6 @@
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/popper.min.js"></script>
 <script src="/assets/js/bootstrap.min.js"></script>
-<script src="https://unpkg.com/htmx.org@2.0.4"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.12/htmx.min.js"></script>
 <script>
     function validateRef() {

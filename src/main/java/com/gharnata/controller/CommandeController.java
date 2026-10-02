@@ -50,7 +50,7 @@ public class CommandeController {
         model.addAttribute("commande", commande);
         model.addAttribute("lignes", lLC);
         model.addAttribute("notif",servNotification.nbNotif());
-        model.addAttribute("prodInfo", this.servProduit.getReferences());
+        model.addAttribute("prodInfo", this.servProduit.getProductDTOs());
         model.addAttribute("cats", this.servProduit.getAllCats());
         model.addAttribute("credit", commande.getMontantHT()-total);
         model.addAttribute("clients", this.servClient.getAllClients());

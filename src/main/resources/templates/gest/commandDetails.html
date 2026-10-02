@@ -909,8 +909,15 @@
                 <div class="profile"><img src="/images/profile.png" alt="Photo de profil">
                     <div><span class="profile-name" th:text="${#authentication.name}">Administrateur</span><span
                             class="profile-role">Administrateur</span></div>
-                    <a th:href="@{/logout}" class="text-muted ml-2" aria-label="Se déconnecter"><i
-                            class="fa fa-sign-out"></i></a></div>
+                    <form th:action="@{/logout}" method="post" style="display:inline;">
+                        <button type="submit"
+                                class="text-muted ml-2"
+                                aria-label="Se déconnecter"
+                                style="border:none; background:none; padding:0; cursor:pointer;">
+                            <i class="fa fa-sign-out"></i>
+                        </button>
+                    </form>
+                </div>
             </div>
         </header>
         <section class="page">
@@ -958,14 +965,19 @@
                                     class="status pending" th:if="${!commande.isConfirme()}">En attente</span></div>
                             <p th:if="${commande.isConfirme()}"
                                th:text="${'Date de confirmation : '+commande.dateConfirmation}"></p>
-                            <div class="status-actions"><a th:if="${!commande.isConfirme()}" class="btn btn-primary"
-                                                           th:href="@{/gharnata/confirme-cmd/1/{id}(id=${commande.id})}"
-                                                           th:onclick="return confirm('Confirmer la commande nº ' + /*[[${commande.id + ' de '+commande.getClient().ste}]]*/);"><i
-                                    class="fa fa-check"></i> Confirmer</a><a th:if="${!commande.isConfirme()}"
-                                                                             class="btn btn-danger"
-                                                                             th:href="@{/gharnata/supp-comand/{id}(id=${commande.id})}"
-                                                                             onclick="return confirm('Voulez vous vraiment Supprimer la commande ?');"><i
-                                    class="fa fa-trash"></i> Supprimer</a></div>
+                            <div class="status-actions">
+                                <a th:if="${!commande.isConfirme()}" class="btn btn-primary"
+                                   th:href="@{/gharnata/confirme-cmd/1/{id}(id=${commande.id})}"
+                                   th:onclick="return confirm('Confirmer la commande nº ' + /*[[${commande.id + ' de '+commande.getClient().ste}]]*/);">
+                                    <i class="fa fa-check"></i> Confirmer
+                                </a>
+                                <a th:if="${!commande.isConfirme()}"
+                                   class="btn btn-danger"
+                                   th:href="@{/gharnata/supp-comand/{id}(id=${commande.id})}"
+                                   onclick="return confirm('Voulez vous vraiment Supprimer la commande ?');"><i
+                                    class="fa fa-trash"></i> Supprimer
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1106,7 +1118,7 @@
                                                                                                 required autofocus>
                         <datalist id="refs">
                             <th:block th:each="pI : ${prodInfo}">
-                                <option th:value="${pI.ref}" th:text="${pI.nom}"></option>
+                                <option th:value="${pI.ref}" th:text="${pI.name}"></option>
                             </th:block>
                         </datalist>
                     </div>
