@@ -3,14 +3,13 @@ package com.gharnata.controller;
 import com.gharnata.entity.Client;
 import com.gharnata.entity.Commande;
 import com.gharnata.entity.Paiement;
+import com.gharnata.entity.dto.ClientDTO;
 import com.gharnata.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -27,38 +26,52 @@ public class ClientController {
     @Autowired
     private ServPaiement servPaiement;
 
+    @GetMapping("/api/clients/search")
+    @ResponseBody
+    public List<ClientDTO> searchProducts(
+            @RequestParam("q") String query) {
+
+        return servClient.searchClients(query);
+    }
+
     @GetMapping("/list-clients")
-    public String listClient(Model model, @RequestParam(value = "ice", required = false) String ice){
-        List<Client> lC = new ArrayList<>();
-        if (ice != null) {
-            Client client = servClient.getClientByIce(ice);
-            lC.add(client);
+    public String listClient(Model model, @RequestParam(value = "clientId", required = false) Long clientId){
+        List<Client> lC ;
+        if (clientId != null) {
+            Client client = servClient.getClientById(clientId);
+            if (client == null) {
+                model.addAttribute("error", "Ce Client n'existe pas.");
+                lC = this.servClient.getAllClients();
+            } else {
+                lC = List.of(client);
+            }
         }else{
             lC = this.servClient.getAllClients();
         }
         model.addAttribute("clients", lC);
-        model.addAttribute("cls", this.servClient.getAllClients());
+        //model.addAttribute("cls", this.servClient.getClientDTOs());
         model.addAttribute("notif",servNotification.nbNotif());
         model.addAttribute("cats", this.servProduit.getAllCats());
         return "gest/listClient";
     }
-    @PostMapping("/list-clients")
-    public String listClient(@RequestParam("ice") String ice, RedirectAttributes attributes){
-        attributes.addAttribute("ice", ice);
-        return "redirect:/gharnata/list-clients";
-    }
+
     @GetMapping("/client-details/{id}")
-    public String showOneProduct(@PathVariable Long id, Model model){
+    public String showOneProduct(@PathVariable Long id, Model model, RedirectAttributes attributes){
         Client client = this.servClient.getClientById(id);
+        if (client == null) {
+            attributes.addFlashAttribute("error", "Ce client n'existe pas.");
+            return "redirect:/gharnata/list-clients";
+        }
         List<Paiement> lP = this.servPaiement.getLimitByClient(client);
         List<Commande> lC = this.servCommande.getLimitByClient(client);
         model.addAttribute("client", client);
         model.addAttribute("commandes", lC);
         model.addAttribute("payments", lP);
-        model.addAttribute("notif",servNotification.nbNotif());
+        model.addAttribute("notif", servNotification.nbNotif());
         model.addAttribute("cats", this.servProduit.getAllCats());
         return "gest/clientDetails";
     }
+
     @PostMapping("/delete-client/{id}")
     public String archiveClient(@PathVariable long id){
         this.servClient.archiveClient(id);
@@ -100,25 +113,6 @@ public class ClientController {
         return "gest/addClient";
     }
 
-    /*@GetMapping("/add-client")
-    public String addClient(@RequestParam(value = "cl", required = false) Client cl, Model model){
-        if (cl != null) {
-            model.addAttribute("cls", cl);
-        }
-        model.addAttribute("cls",new Client());
-        return "gest/addClient";
-    }
-    @PostMapping("/add-client")
-    public String addClient(RedirectAttributes attributes, @ModelAttribute("client") Client client){
-        Long c = this.servClient.saveClient(client);
-        if (c==1){
-            attributes.addFlashAttribute("success", "Le client "+ client.getSte()+" a été ajouté avec succès.");
-        }else {
-            attributes.addFlashAttribute("error", "Le client avec ce ICE: "+ client.getIce()+" existe déjà.");
-            attributes.addAttribute("cl", client);
-        }
-        return "redirect:/gharnata/add-client";
-    }*/
     @GetMapping("/modify-client/{id}")
     public String modifyClient(Model model, @PathVariable Long id){
         Client client = this.servClient.getClientById(id);
@@ -137,16 +131,7 @@ public class ClientController {
         }
         return "redirect:/gharnata/modify-client/"+client.getId();
     }
-    @GetMapping("/paiements/{id}")
-    public String showPaie(Model model, @PathVariable Long id){
-        Client client = this.servClient.getClientById(id);
-        List<Paiement> lP = this.servPaiement.getPaymentsByClient(client);
-        model.addAttribute("client", client);
-        model.addAttribute("payments", lP);
-        model.addAttribute("notif",servNotification.nbNotif());
-        model.addAttribute("cats", this.servProduit.getAllCats());
-        return "gest/showPayments";
-    }
+
     @GetMapping("/commandes/{id}")
     public String showComm(Model model, @PathVariable Long id){
         Client client = this.servClient.getClientById(id);
@@ -175,27 +160,4 @@ public class ClientController {
         return "gest/modifierCredit";
     }
 
-    /*@GetMapping("/modify-credit")
-    public String modifyCredit(Model model, @RequestParam(value = "id", required = false) Long id,  @RequestParam(value = "nouveauCredit", required = false) Double nouveauCredit, @RequestParam(value = "ice", required = false) String ice){
-        System.out.println("id" + id);
-        System.out.println("nouveauCredit" + nouveauCredit);
-        System.out.println("ice" + ice);
-        List<Client> clients = servClient.getAllClients();
-        Client c;
-        if (ice != null) {
-            c = this.servClient.getClientByIce(ice);
-            model.addAttribute("client", c);
-        }else if(nouveauCredit != null) {
-            c = servClient.updateClientCredit(id, nouveauCredit);
-            model.addAttribute("client", c);
-        }
-        model.addAttribute("clients", clients);
-        return "gest/modifierCredit";
-    }
-    @PostMapping("/modify-credit")
-    public String modifierCredit(@RequestParam Long id, @RequestParam double nouveauCredit, RedirectAttributes attributes) {
-        attributes.addAttribute("id", id);
-        attributes.addAttribute("nouveauCredit", nouveauCredit);
-        return "redirect:/gharnata/modify-credit";
-    }*/
 }

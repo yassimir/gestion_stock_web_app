@@ -446,7 +446,7 @@
 
         .content-grid {
             display: grid;
-            grid-template-columns:1fr 1fr;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
             gap: 22px
         }
 
@@ -455,7 +455,9 @@
             border: 1px solid var(--line);
             border-radius: 16px;
             box-shadow: var(--shadow);
-            padding: 23px 24px
+            padding: 23px 24px;
+            min-width: 0;
+            overflow-x: hidden
         }
 
         .panel-head {
@@ -706,6 +708,9 @@
                 border-top: 1px solid var(--line);
                 padding-top: 19px
             }
+            .content-grid {
+                grid-template-columns: minmax(0, 1fr)
+            }
         }
 
         @media (max-width: 780px) {
@@ -783,10 +788,6 @@
                 border-top: 0;
                 border-bottom: 0;
                 padding-top: 0
-            }
-
-            .content-grid {
-                grid-template-columns:1fr
             }
 
             .actions .btn {
@@ -960,7 +961,7 @@
                                             type="hidden" name="id" th:value="${payment.id}">
                                         <button type="submit" class="download-btn" title="Télécharger la facture"><i
                                                 class="fa fa-download"></i></button>
-                                        <input type="checkbox" name="tmp" hidden></form>
+                                        <input type="checkbox" name="tmp"></form>
                                 </div>
                             </li>
                         </th:block>
@@ -979,29 +980,36 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <form method="post" role="form" th:action="@{/gharnata/payment}" enctype="multipart/form-data">
-                <div class="modal-body"><input type="hidden" name="idC" th:value="${client.id}">
-                    <div class="field"><label class="field-label" for="montant">Montant du paiement</label><input
-                            type="number" class="control" id="montant" placeholder="Ex. 1500.00" name="montant"
-                            min="0.01" step="0.01" required></div>
-                    <div class="field"><label class="field-label" for="modPai">Méthode de paiement</label><select
-                            class="control" id="modPai" name="modPai" onchange="updatePaymentInfo()" required>
-                        <option value="">Sélectionner une méthode</option>
-                        <option value="Virement">Virement bancaire</option>
-                        <option value="Chèque">Chèque</option>
-                        <option value="Espèces">Espèces</option>
-                        <option value="Effet">Effet</option>
-                    </select></div>
-                    <div class="field"><label class="field-label" for="pInfo">Référence ou détails <span
-                            style="color:var(--muted);font-weight:400">(facultatif)</span></label><input class="control"
-                                                                                                         type="text"
-                                                                                                         id="pInfo"
-                                                                                                         name="pInfo"
-                                                                                                         placeholder="Nº de chèque, référence de virement...">
+                <div class="modal-body">
+                    <input type="hidden" name="idC" th:value="${client.id}">
+                    <div class="field">
+                        <label class="field-label" for="montant">Montant du paiement</label>
+                        <input type="number" class="control" id="montant" placeholder="Ex. 1500.00" name="montant"
+                            min="0.01" step="0.01" required>
                     </div>
-                    <div class="field"><label class="field-label" for="justificatif">Justificatif de paiement <span
-                            style="color:var(--muted);font-weight:400">(facultatif)</span></label>
-                        <div class="file-box"><input type="file" id="justificatif" name="justificatif"
-                                                     accept=".pdf,.jpg,.jpeg,.png"><span class="file-help">PDF, JPG ou PNG · 5 Mo maximum</span>
+                    <div class="field">
+                        <label class="field-label" for="modPai">Méthode de paiement</label>
+                        <select class="control" id="modPai" name="modPai" onchange="updatePaymentInfo()" required>
+                            <option value="">Sélectionner une méthode</option>
+                            <option value="Virement">Virement bancaire</option>
+                            <option value="Chèque">Chèque</option>
+                            <option value="Espèces">Espèces</option>
+                            <option value="Effet">Effet</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="pInfo">Référence ou détails
+                            <span style="color:var(--muted);font-weight:400">(facultatif)</span>
+                        </label>
+                        <input class="control" type="text" id="pInfo" name="pInfo" placeholder="Nº de chèque, référence de virement...">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="justificatif">Justificatif de paiement
+                            <span style="color:var(--muted);font-weight:400">(facultatif)</span>
+                        </label>
+                        <div class="file-box">
+                            <input type="file" id="justificatif" name="justificatif" accept=".pdf,.jpg,.jpeg,.png">
+                            <span class="file-help">PDF, JPG ou PNG · 5 Mo maximum</span>
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,8 @@ package com.gharnata.service;
 
 import com.gharnata.entity.Client;
 import com.gharnata.entity.Compte;
+import com.gharnata.entity.dto.ClientDTO;
+import com.gharnata.entity.dto.ProductDTO;
 import com.gharnata.repository.RepClient;
 import com.gharnata.repository.RepCompte;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,10 @@ public class ServClient {
         return this.repClient.findByIce(client.getIce());
     }
 
+    public List<ClientDTO> getClientDTOs(){
+        return this.repClient.findAllClientDTO();
+    }
+
     public List<Client> getAllClients() {
         return this.repClient.findAll();
     }
@@ -106,5 +112,16 @@ public class ServClient {
             return cl;
         }
         return null;
+    }
+
+    public List<ClientDTO> searchClients(String query) {
+        return repClient.searchClients(query)
+                .stream()
+                .map(client -> new ClientDTO(
+                        client.getId(),
+                        client.getSte(),
+                        client.getIce()
+                ))
+                .toList();
     }
 }

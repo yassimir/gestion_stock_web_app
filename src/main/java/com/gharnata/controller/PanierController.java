@@ -65,14 +65,14 @@ public class PanierController {
         return"redirect:/gharnata/product-details/"+id;
     }
     @PostMapping("/addToPanier-m")
-    public String addToPanier(@RequestParam("ref") String ref, @RequestParam("quant") int quant, RedirectAttributes attributes){
+    public String addToPanierM(@RequestParam("productId") Long productId, @RequestParam("quant") int quant, RedirectAttributes attributes){
         if(quant<=0){
             attributes.addFlashAttribute("error", "Veuillez choisir une quantité.");
             return"redirect:/gharnata/pass-mass";
         }
-        Produit produit = this.servProduit.getProductByRef(ref);
+        Produit produit = this.servProduit.getProductById(productId);
         if(produit==null){
-            attributes.addFlashAttribute("error", "Vérifiez la référence : "+ ref);
+            attributes.addFlashAttribute("error", "Vérifiez la référence : ");
             return"redirect:/gharnata/pass-mass";
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

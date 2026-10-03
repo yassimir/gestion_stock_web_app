@@ -15,10 +15,6 @@ public class MainController {
     @Autowired
     private ServProduit servProduit;
 
-    @GetMapping("/")
-    public String ff(){
-        return "redirect:/gharnata/show-products";
-    }
     @GetMapping("/notif-stock")
     public String notif(Model model){
         model.addAttribute("pds", this.servNotification.getAll());

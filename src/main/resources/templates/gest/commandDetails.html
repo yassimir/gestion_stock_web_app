@@ -1164,12 +1164,10 @@
             <form method="post" role="form" th:action="@{/gharnata/pay-cmd}"
                   onsubmit="setTimeout(function(){location.reload()},1000)">
                 <div class="modal-body">
-                    <div class="field"><label class="field-label" for="client_id">Client</label><input list="clits"
-                                                                                                       class="control"
-                                                                                                       name="client_id"
-                                                                                                       id="client_id"
-                                                                                                       th:value="${commande.getClient().getId()}"
-                                                                                                       required>
+                    <div class="field">
+                        <label class="field-label" for="client_id">Client</label>
+                        <input list="clits" class="control" name="client_id" id="client_id"
+                               th:value="${commande.getClient().getId()}" required>
                         <datalist id="clits">
                             <th:block th:each="client : ${clients}">
                                 <option th:value="${client.getId()}" th:text="${client.getSte()}"></option>

@@ -36,6 +36,32 @@
             font-size: 14px
         }
 
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        #clientSuggestions {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #clientSuggestions .list-group-item {
+            cursor: pointer;
+            background-color: rgba(216, 215, 215, 0.96);
+            color: #212529;
+            border-color: rgba(204, 202, 202, 0.94);
+            transition: background-color 0.15s ease;
+        }
+
+        #clientSuggestions .list-group-item:hover {
+            background-color: #cccbcb;
+        }
+
+        #clientSuggestions .list-group-item small {
+            color: #3e4243 !important;
+        }
+
         a {
             color: inherit;
             text-decoration: none
@@ -839,7 +865,7 @@
                  style="border:0;border-radius:12px;background:#fff0f1;color:#a23e4b;padding:13px 17px;margin-bottom:20px">
                 <i class="fa fa-exclamation-circle mr-2"></i><span th:text="${error}"></span></div>
             <div class="toolbar">
-                <form class="search-form" th:action="@{/gharnata/list-clients}" method="post">
+                <!--<form class="search-form" th:action="@{/gharnata/list-clients}" method="post">
                     <input list="codes" class="search-input" name="ice"
                            placeholder="Rechercher par ICE, C.I.N ou nom du client" required autofocus>
                     <datalist id="codes">
@@ -848,6 +874,22 @@
                         </th:block>
                     </datalist>
                     <button class="search-btn" type="submit" aria-label="Rechercher"><i class="fa fa-search"></i>
+                    </button>
+                </form>-->
+                <form class="search-form" th:action="@{/gharnata/list-clients}" method="get" id="clientSearchForm">
+                    <div class="search-wrapper">
+                        <input type="text" class="control" id="searchClient" placeholder="ICE, C.I.N ou nom du client" autocomplete="off"
+                               required autofocus>
+                        <!-- ID du produit sélectionné -->
+                        <input type="hidden" id="clientId" name="clientId">
+                        <!-- Suggestions -->
+                        <ul id="clientSuggestions"
+                            class="list-group position-absolute w-100 mt-1 shadow-sm"
+                            style="z-index:1050;top:100%;left:0;max-height:200px;overflow-y:auto;">
+                        </ul>
+                    </div>
+                    <button class="search-btn" type="submit" aria-label="Rechercher">
+                        <i class="fa fa-search"></i>
                     </button>
                 </form>
                 <div class="catalog-meta"><i class="fa fa-users"></i> Répertoire clients</div>
@@ -989,6 +1031,129 @@
                 });
         });
     }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const searchInput = document.getElementById("searchClient");
+        const suggestions = document.getElementById("clientSuggestions");
+        const hiddenClientId = document.getElementById("clientId");
+        const form = document.getElementById("clientSearchForm");
+
+        // Permet d'attendre avant d'envoyer la requête
+        let searchTimeout;
+        // Permet d'identifier la requête la plus récente
+        let searchRequestId = 0;
+
+        async function searchClients() {
+            const query = searchInput.value.trim();
+            hiddenClientId.value = "";
+            suggestions.innerHTML = "";
+            if (query.length < 1) {
+                return;
+            }
+            // Identifiant de cette recherche
+            const requestId = ++searchRequestId;
+            try {
+                const response = await fetch(
+                    `/gharnata/api/clients/search?q=${encodeURIComponent(query)}`
+                );
+                if (!response.ok) {
+                    throw new Error("Erreur lors de la recherche");
+                }
+                const clients = await response.json();
+                /*
+                 * Si une nouvelle recherche a été lancée entre-temps,
+                 * on ignore le résultat de cette ancienne recherche.
+                 */
+                if (requestId !== searchRequestId) {
+                    return;
+                }
+                suggestions.innerHTML = "";
+                if (clients.length > 0) {
+                    clients.forEach(client => {
+                        const li = document.createElement("li");
+                        li.classList.add(
+                            "list-group-item",
+                            "list-group-item-action",
+                            "p-2",
+                            "small"
+                        );
+
+                        li.innerHTML = `
+                            <div>
+                                <strong>${client.ste}</strong><br>
+                                <small class="text-muted">
+                                    ICE / CIN : ${client.ice}
+                                </small>
+                            </div>
+                        `;
+
+                        li.addEventListener("click", () => {
+                            searchInput.value =
+                                `${client.ste} - ${client.ice}`;
+                            hiddenClientId.value = client.id;
+                            suggestions.innerHTML = "";
+                        });
+                        suggestions.appendChild(li);
+                    });
+                } else {
+                    const li = document.createElement("li");
+                    li.classList.add(
+                        "list-group-item",
+                        "text-muted",
+                        "small"
+                    );
+                    li.textContent = "Aucun client trouvé";
+                    suggestions.appendChild(li);
+                }
+            } catch (error) {
+                console.error("Erreur recherche client :", error);
+            }
+        }
+        // Recherche lorsque l'utilisateur écrit
+        searchInput.addEventListener("input", () => {
+
+            // Annule le délai précédent
+            clearTimeout(searchTimeout);
+
+            // Une nouvelle saisie annule la sélection précédente
+            hiddenClientId.value = "";
+
+            // Efface immédiatement les anciennes suggestions
+            suggestions.innerHTML = "";
+
+            /*
+             * Attend 300 ms après la dernière frappe
+             * avant d'envoyer la requête.
+             */
+            searchTimeout = setTimeout(() => {
+                searchClients();
+            }, 300);
+        });
+        // Réafficher les suggestions lorsqu'on revient dans l'input
+        searchInput.addEventListener("focus", () => {
+            if (searchInput.value.trim().length > 0) {
+                // On peut rechercher immédiatement au focus
+                searchClients();
+            }
+        });
+        // Fermer les suggestions lorsqu'on clique ailleurs
+        document.addEventListener("click", (event) => {
+            if (!event.target.closest("#searchClient") &&
+                !event.target.closest("#clientSuggestions")) {
+                suggestions.innerHTML = "";
+            }
+        });
+        // Vérification avant soumission
+        form.addEventListener("submit", (event) => {
+            if (!hiddenClientId.value) {
+                event.preventDefault();
+                alert("Veuillez sélectionner un client dans la liste.");
+                searchInput.focus();
+            }
+        });
+    });
 </script>
 </body>
 </html>

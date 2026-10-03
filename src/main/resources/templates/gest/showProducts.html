@@ -38,6 +38,32 @@
             font-size: 14px
         }
 
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        #productSuggestions {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #productSuggestions .list-group-item {
+            cursor: pointer;
+            background-color: rgba(216, 215, 215, 0.96);
+            color: #212529;
+            border-color: rgba(204, 202, 202, 0.94);
+            transition: background-color 0.15s ease;
+        }
+
+        #productSuggestions .list-group-item:hover {
+            background-color: #cccbcb;
+        }
+
+        #productSuggestions .list-group-item small {
+            color: #3e4243 !important;
+        }
+
         a {
             color: inherit;
             text-decoration: none
@@ -803,7 +829,7 @@
                 <a class="primary-btn" th:href="@{/gharnata/add-product}"><i class="fa fa-plus"></i> Ajouter un produit</a>
             </div>
             <div class="toolbar">
-                <form class="search-form" th:action="@{/gharnata/show-products}" method="post">
+                <!--<form class="search-form" th:action="@{/gharnata/show-products}" method="post">
                     <input list="codes" class="search-input" name="ref"
                            placeholder="Rechercher par référence ou nom de produit" required autofocus>
                     <datalist id="codes">
@@ -812,6 +838,22 @@
                         </th:block>
                     </datalist>
                     <button class="search-btn" type="submit" aria-label="Rechercher"><i class="fa fa-search"></i>
+                    </button>
+                </form>-->
+                <form class="search-form" th:action="@{/gharnata/show-products}" method="get" id="productSearchForm">
+                    <div class="search-wrapper">
+                        <input type="text" class="control" id="searchProduct" placeholder="Référence ou nom du produit" autocomplete="off"
+                               required autofocus>
+                        <!-- ID du produit sélectionné -->
+                        <input type="hidden" id="productId" name="productId">
+                        <!-- Suggestions -->
+                        <ul id="productSuggestions"
+                            class="list-group position-absolute w-100 mt-1 shadow-sm"
+                            style="z-index:1050;top:100%;left:0;max-height:200px;overflow-y:auto;">
+                        </ul>
+                    </div>
+                    <button class="search-btn" type="submit" aria-label="Rechercher">
+                        <i class="fa fa-search"></i>
                     </button>
                 </form>
                 <div class="catalog-meta"><i class="fa fa-cubes"></i> Catalogue disponible</div>
@@ -1112,6 +1154,130 @@
                 });
         });
     }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const searchInput = document.getElementById("searchProduct");
+        const suggestions = document.getElementById("productSuggestions");
+        const hiddenProductId = document.getElementById("productId");
+        const form = document.getElementById("productSearchForm");
+
+        // Permet d'attendre avant d'envoyer la requête
+        let searchTimeout;
+        // Permet d'identifier la requête la plus récente
+        let searchRequestId = 0;
+
+        async function searchProducts() {
+            const query = searchInput.value.trim();
+            hiddenProductId.value = "";
+            suggestions.innerHTML = "";
+            if (query.length < 1) {
+                return;
+            }
+            // Identifiant de cette recherche
+            const requestId = ++searchRequestId;
+            try {
+                const response = await fetch(
+                    `/gharnata/api/products/search?q=${encodeURIComponent(query)}`
+                );
+                if (!response.ok) {
+                    throw new Error("Erreur lors de la recherche");
+                }
+                const products = await response.json();
+                /*
+                 * Si une nouvelle recherche a été lancée entre-temps,
+                 * on ignore le résultat de cette ancienne recherche.
+                 */
+                if (requestId !== searchRequestId) {
+                    return;
+                }
+                suggestions.innerHTML = "";
+                if (products.length > 0) {
+                    products.forEach(product => {
+                        const li = document.createElement("li");
+                        li.classList.add(
+                            "list-group-item",
+                            "list-group-item-action",
+                            "p-2",
+                            "small"
+                        );
+
+                        li.innerHTML = `
+                            <div>
+                                <strong>${product.name}</strong><br>
+                                <small class="text-muted">
+                                    Référence : ${product.ref}
+                                </small>
+                            </div>
+                        `;
+
+                        li.addEventListener("click", () => {
+                            searchInput.value =
+                                `${product.name} - ${product.ref}`;
+                            hiddenProductId.value = product.id;
+                            suggestions.innerHTML = "";
+                        });
+                        suggestions.appendChild(li);
+                    });
+                } else {
+                    const li = document.createElement("li");
+                    li.classList.add(
+                        "list-group-item",
+                        "text-muted",
+                        "small"
+                    );
+                    li.textContent = "Aucun produit trouvé";
+                    suggestions.appendChild(li);
+                }
+            } catch (error) {
+                console.error("Erreur recherche produit :", error);
+            }
+        }
+        // Recherche lorsque l'utilisateur écrit
+        searchInput.addEventListener("input", () => {
+
+            // Annule le délai précédent
+            clearTimeout(searchTimeout);
+
+            // Une nouvelle saisie annule la sélection précédente
+            hiddenProductId.value = "";
+
+            // Efface immédiatement les anciennes suggestions
+            suggestions.innerHTML = "";
+
+            /*
+             * Attend 300 ms après la dernière frappe
+             * avant d'envoyer la requête.
+             */
+            searchTimeout = setTimeout(() => {
+                searchProducts();
+            }, 300);
+        });
+        // Réafficher les suggestions lorsqu'on revient dans l'input
+        searchInput.addEventListener("focus", () => {
+            if (searchInput.value.trim().length > 0) {
+                // On peut rechercher immédiatement au focus
+                searchProducts();
+            }
+        });
+        // Fermer les suggestions lorsqu'on clique ailleurs
+        document.addEventListener("click", (event) => {
+            if (!event.target.closest("#searchProduct") &&
+                !event.target.closest("#productSuggestions")) {
+                suggestions.innerHTML = "";
+            }
+        });
+        // Vérification avant soumission
+        form.addEventListener("submit", (event) => {
+            if (!hiddenProductId.value) {
+                event.preventDefault();
+                alert("Veuillez sélectionner un produit dans la liste.");
+                searchInput.focus();
+            }
+        });
+    });
 </script>
 
 </body>

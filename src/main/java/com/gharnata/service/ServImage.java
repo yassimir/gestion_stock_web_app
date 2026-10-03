@@ -2,6 +2,7 @@ package com.gharnata.service;
 
 import com.gharnata.compenents.ResourceUtils;
 import com.gharnata.entity.Image;
+import com.gharnata.entity.Produit;
 import com.gharnata.repository.RepImage;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class ServImage {
@@ -38,37 +42,6 @@ public class ServImage {
     public ServImage(RepImage repImage) {
         this.repImage = repImage;
     }
-    /*public Image treatPic(MultipartFile imagee) throws Exception {
-
-        System.out.println("========== IMAGE ==========");
-        System.out.println("imagee = " + imagee);
-
-        if (imagee != null) {
-            System.out.println("Nom : " + imagee.getOriginalFilename());
-            System.out.println("Taille : " + imagee.getSize());
-            System.out.println("Type : " + imagee.getContentType());
-            System.out.println("Vide : " + imagee.isEmpty());
-        }
-
-        Image image = new Image();
-
-        if (imagee != null && !imagee.isEmpty()) {
-
-            byte[] data = imagee.getBytes();
-
-            System.out.println("Image reçue : " + data.length + " octets");
-
-            image.setData(data);
-            return repImage.save(image);
-        }
-
-        System.out.println("AUCUNE IMAGE -> image par défaut");
-
-        byte[] dt = ResourceUtils.load("static/images/defaut.JPEG");
-        image.setData(dt);
-
-        return repImage.save(image);
-    }*/
 
     public Image treatPic(MultipartFile imagee) throws Exception {
 
@@ -215,97 +188,6 @@ public class ServImage {
 
         return outputStream.toByteArray();
     }
-   /* public String treatPic(MultipartFile image){
-        if (!image.isEmpty()) {
-            System.out.printf("hello from image");
-            try {
-                // Sauvegarde le fichier dans le dossier d'upload de l'application
-                Date date = new Date();
-                SimpleDateFormat formater = new SimpleDateFormat("MMddHHmmss");
-                String nm = formater.format(date);
-                String ext = StringUtils.getFilenameExtension(image.getOriginalFilename());
-                String fileName = nm + "." + ext;
-                *//*File directory = new File("src/main/resources/static/images/products");*//* //chemin relatif por int
-                File directory = new File("classes/static/images/products");
-                File dest = new File(directory.getAbsolutePath() + File.separator + fileName);
-                image.transferTo(dest);
-                return fileName;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return "";
-    }*/
-    /*public Image treatPic(MultipartFile imagee) throws Exception {
-        Image image = new Image();
-        if (!imagee.isEmpty()) {
-            try {
-                byte[] data = imagee.getBytes();
-                image.setData(data);
-                return repImage.save(image);
-            } catch (IOException e) {
-                //byte[] dt = Files.readAllBytes(path);
-                byte[] dt = ResourceUtils.load("static/images/defaut.JPEG");
-                image.setData(dt);
-                return repImage.save(image);
-            }
-        }
-        byte[] dt = ResourceUtils.load("static/images/defaut.JPEG");
-        image.setData(dt);
-        return repImage.save(image);
-    }*/
-   /*public Image treatPic(MultipartFile imagee) throws Exception {
-       Image image = new Image();
-
-       if (!imagee.isEmpty()) {
-           try {
-               BufferedImage original = ImageIO.read(imagee.getInputStream());
-
-               if (original == null) {
-                   throw new IOException("Image invalide");
-               }
-
-               // Redimensionnement : maximum 800 px
-               BufferedImage resized = Scalr.resize(
-                       original,
-                       Scalr.Method.QUALITY,
-                       Scalr.Mode.AUTOMATIC,
-                       800,
-                       800
-               );
-
-               // Compression JPEG
-               ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-               ImageIO.write(resized, "jpg", outputStream);
-
-               image.setData(outputStream.toByteArray());
-
-               return repImage.save(image);
-
-           } catch (IOException e) {
-               byte[] dt = ResourceUtils.load("static/images/defaut.JPEG");
-               image.setData(dt);
-               return repImage.save(image);
-           }
-       }
-
-       byte[] dt = ResourceUtils.load("static/images/defaut.JPEG");
-       image.setData(dt);
-       return repImage.save(image);
-   }*/
-    /*public void modifyPic(MultipartFile image, long id){
-        Image img = this.repImage.findById(id).orElse(new Image());
-        if (!image.isEmpty()) {
-            try {
-                byte[] data = image.getBytes();
-                img.setData(data);
-                repImage.save(img);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
    public void modifyPic(MultipartFile image, long id) {
 
        Image img = this.repImage.findById(id).orElse(new Image());
@@ -393,5 +275,17 @@ public class ServImage {
            e.printStackTrace();
        }
    }
+
+    public java.util.List<String> encodeImages(java.util.List<Produit> produits) {
+        List<String> images = new ArrayList<>();
+        for (Produit p : produits) {
+            if (p.getPic() != null && p.getPic().getData() != null) {
+                images.add(Base64.getEncoder().encodeToString(p.getPic().getData()));
+            } else {
+                images.add(""); // ou une image par défaut en base64, selon ce que ton template attend
+            }
+        }
+        return images;
+    }
 
 }
